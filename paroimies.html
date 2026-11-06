@@ -1,0 +1,1010 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Emoji Παροιμίες</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geologica:wght@100..900&family=Lilita+One&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#e9f0f8;--panel:#fff;--line:#c8d6e6;--ink:#16263a;--text:#16263a;--muted:#5a6b80;
+  --accent:#f0b429;--accent-dark:#b8841a;--accent-ink:#2a1d00;--good-t:#178a48;--bad:#d62f2f;--r:14px;
+  --easy:#22c55e;--easy-t:#178a48;--med:#e0a100;--med-t:#a87400;--hard:#ef4444;--hard-t:#d62f2f;--lv:#22c55e;
+  --font:"Geologica","Segoe UI",system-ui,-apple-system,Roboto,Arial,sans-serif}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%}
+body{background:var(--bg);color:var(--text);font:400 16px/1.5 var(--font);min-height:100vh;overflow-x:hidden;padding:env(safe-area-inset-top,0) 0 env(safe-area-inset-bottom,0)}
+main{max-width:520px;margin:0 auto;padding:24px 16px 90px}
+h1,h2{margin:0;font-weight:800}
+h1{font-size:32px;line-height:1.15}
+h2{font-size:24px;line-height:1.25}
+p{margin:0}
+b{font-weight:800}
+button,textarea,input{font:inherit;color:inherit}
+button{cursor:pointer;border:0;border-radius:var(--r);padding:12px 18px;min-height:48px;font-weight:600;background:var(--panel);
+  transition:transform .15s,box-shadow .2s,background .2s,color .2s}
+button:active:not(:disabled){transform:translateY(2px) scale(.98)}
+button:focus-visible,textarea:focus-visible,input:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+button:disabled{opacity:.45;cursor:not-allowed}
+.primary{position:relative;overflow:hidden;background:var(--accent);color:var(--accent-ink);box-shadow:0 4px 0 var(--accent-dark)}
+.primary::after{content:"";position:absolute;inset:0;background:linear-gradient(110deg,transparent 30%,rgba(255,255,255,.6) 50%,transparent 70%);transform:translateX(-130%)}
+.ghost{background:transparent;box-shadow:inset 0 0 0 2px var(--line)}
+@media (hover:hover){
+  button:hover:not(:disabled){transform:translateY(-2px)}
+  .primary:hover:not(:disabled){box-shadow:0 6px 0 var(--accent-dark)}
+  .primary:hover::after{transform:translateX(130%);transition:transform .7s}
+  .ghost:hover:not(:disabled){box-shadow:inset 0 0 0 2px var(--ink)}
+}
+.row{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+.row>*{flex:1 1 auto}
+[hidden]{display:none!important}
+.muted{color:var(--muted)}
+.easy{color:var(--easy-t)} .med{color:var(--med-t)} .hard{color:var(--hard-t)}
+.enter{animation:enter .55s cubic-bezier(.2,.8,.2,1) both}
+@keyframes enter{from{opacity:0;transform:translateY(18px)}}
+
+/* αρχική */
+.head p{color:var(--muted);margin-top:8px}
+.tile{background:#fff;color:var(--ink);border:2px solid var(--ink);border-radius:var(--r);margin:20px 0 24px;padding:26px 12px;text-align:center;
+  font-size:clamp(44px,13vw,72px);line-height:1.25;letter-spacing:.06em;box-shadow:0 7px 0 var(--ink);word-break:break-word}
+.head .tile{font-size:44px;padding:18px 12px;animation:bob 3.2s ease-in-out infinite}
+@keyframes bob{50%{transform:translateY(-8px) rotate(-1deg)}}
+.em{display:inline-block;animation:pop .6s cubic-bezier(.3,1.6,.5,1) backwards;transition:transform .2s}
+.em:hover{transform:scale(1.25) rotate(-8deg)}
+@keyframes pop{0%{transform:scale(0) rotate(-30deg);opacity:0}100%{transform:none;opacity:1}}
+.path,.opts{display:grid;gap:12px}
+.path{grid-template-columns:repeat(3,1fr);margin:24px 0}
+.card,.opt{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:16px 8px;text-align:center;display:flex;flex-direction:column;gap:4px}
+.card b{font-size:30px;line-height:1.1}
+.card span{font-weight:600;font-size:15px}
+.card small,.opt span{color:var(--muted);font-size:13px}
+.enter .card,.enter .opt{animation:rise .5s cubic-bezier(.2,.9,.3,1.2) both;animation-delay:calc(var(--i,0)*90ms + 150ms)}
+@keyframes rise{from{opacity:0;transform:translateY(26px) scale(.92)}}
+.start{width:100%;font-size:20px;min-height:62px;animation:ring 2.2s infinite}
+@keyframes ring{0%{box-shadow:0 4px 0 var(--accent-dark),0 0 0 0 rgba(240,180,41,.65)}75%,100%{box-shadow:0 4px 0 var(--accent-dark),0 0 0 18px rgba(240,180,41,0)}}
+.foot{margin-top:26px;display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:4px 24px}
+.foot button{white-space:nowrap}
+.foot button{background:none;color:var(--muted);text-decoration:underline;min-height:40px;font-size:14px;font-weight:400;padding:0 8px}
+
+/* επιλογή χρόνου */
+.back{min-height:40px;padding:6px 14px;font-size:14px;margin-bottom:24px}
+.opts{grid-template-columns:1fr 1fr;margin-top:24px}
+.opt{padding:22px 8px;min-height:116px;justify-content:center;font-weight:600;border-width:2px}
+.opt b{font-size:38px;line-height:1.1}
+@media (hover:hover){.opt:hover{border-color:var(--accent);transform:translateY(-4px) rotate(-1deg);box-shadow:0 8px 0 var(--accent)}}
+.opt.picked{background:var(--accent);border-color:var(--accent-dark);transform:scale(1.06);animation:none}
+.opt.picked span{color:var(--accent-ink)}
+
+/* παιχνίδι */
+.top{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:12px;font-size:14px}
+.top .ghost{justify-self:start}
+.top button{min-height:40px;padding:6px 14px;font-size:14px}
+.mid{text-align:center;line-height:1.2}
+.mid b{font-size:18px;display:block}
+.mid small{color:var(--muted)}
+.pts{font-weight:800;font-size:18px;justify-self:end;white-space:nowrap}
+.bump{animation:bump .45s}
+@keyframes bump{40%{transform:scale(1.35);color:var(--good-t)}}
+.steps{display:flex;gap:3px;margin:16px 0 0}
+.steps i{flex:1;height:8px;border-radius:4px;background:var(--line);transition:background .3s,transform .3s}
+.steps i.gap{margin-left:7px}
+.steps i.done{background:var(--c)}
+.steps i.cur{background:var(--c);animation:cur 1s ease-in-out infinite}
+@keyframes cur{50%{transform:scaleY(1.9);opacity:.7}}
+.timer{height:6px;border-radius:3px;background:var(--line);margin-top:12px;overflow:hidden}
+.timer i{display:block;height:100%;width:100%;background:var(--accent);transition:width 1s linear}
+.timer.low i{background:var(--bad);animation:blink .5s infinite alternate}
+@keyframes blink{to{opacity:.4}}
+#tile{margin-top:20px}
+#tile.flip{animation:flip .55s cubic-bezier(.2,.9,.3,1.1)}
+@keyframes flip{from{opacity:0;transform:perspective(700px) rotateX(70deg) translateY(-30px)}}
+#tile.win{animation:win .8s;border-color:var(--good-t);box-shadow:0 7px 0 var(--good-t),0 0 0 6px rgba(34,197,94,.25)}
+@keyframes win{30%{transform:scale(1.08) rotate(-2deg)}60%{transform:scale(.98) rotate(1deg)}}
+#tile.lose{animation:wob .5s;border-color:var(--hard-t);box-shadow:0 7px 0 var(--hard-t)}
+@keyframes wob{25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
+.hintbox{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:14px 16px;margin-bottom:16px}
+.hintbox div+div{margin-top:8px}
+.hintbox div:last-child{animation:slide .4s cubic-bezier(.2,.9,.3,1.2)}
+@keyframes slide{from{opacity:0;transform:translateY(-10px)}}
+.mono{letter-spacing:.14em;font-weight:600}
+textarea{width:100%;padding:14px;border-radius:var(--r);border:2px solid var(--line);background:var(--panel);resize:none;min-height:84px;transition:border-color .2s,box-shadow .2s}
+textarea:focus{border-color:var(--accent);box-shadow:0 0 0 4px rgba(240,180,41,.25);outline:none}
+textarea.shake{animation:wob .4s}
+textarea.wrong{border-color:var(--bad);box-shadow:0 0 0 4px rgba(214,47,47,.18)}
+.msg{min-height:24px;margin:8px 2px 14px;font-weight:600}
+.msg.bad{color:var(--bad)}
+.reveal{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:18px 16px;margin:0 0 16px;font-size:20px;font-weight:600;animation:rise .5s cubic-bezier(.2,.9,.3,1.2)}
+.reveal small{display:block;font-size:14px;margin-top:6px}
+.reveal.won small{color:var(--good-t)} .reveal.gave small{color:var(--med-t)}
+
+/* εφέ επιπέδου, κομφετί */
+#flash{position:fixed;inset:0;pointer-events:none;opacity:0;z-index:40;
+  background:radial-gradient(circle at 50% 45%,color-mix(in srgb,var(--lv) 70%,transparent),transparent 72%);box-shadow:inset 0 0 140px 20px var(--lv)}
+#flash.go{animation:flash 1s ease-out}
+@keyframes flash{0%{opacity:0}18%{opacity:1}100%{opacity:0}}
+main.shake{animation:bigshake .6s cubic-bezier(.36,.07,.19,.97)}
+@keyframes bigshake{10%,90%{transform:translate(-3px,1px)}20%,80%{transform:translate(6px,-2px) rotate(.4deg)}30%,50%,70%{transform:translate(-10px,3px) rotate(-.6deg)}40%,60%{transform:translate(10px,-3px) rotate(.6deg)}}
+#banner{position:fixed;inset:0;display:grid;place-items:center;pointer-events:none;opacity:0;z-index:45}
+#banner div{background:rgba(255,255,255,.92);border:3px solid var(--lv);border-radius:24px;padding:22px 34px;text-align:center;box-shadow:0 0 60px var(--lv)}
+#bName{display:block;font-size:clamp(40px,13vw,76px);line-height:1.1;font-weight:800;color:var(--lvt,var(--easy-t))}
+#bSub{color:var(--muted);font-weight:600}
+#banner.show{animation:banner 1.7s cubic-bezier(.2,.9,.3,1.1) both}
+@keyframes banner{0%{opacity:0;transform:scale(.4) rotate(-6deg)}16%{opacity:1;transform:scale(1.08) rotate(1deg)}26%{transform:scale(1)}80%{opacity:1;transform:scale(1)}100%{opacity:0;transform:scale(1.25)}}
+#fx{position:fixed;inset:0;pointer-events:none;z-index:60;overflow:hidden}
+.conf{position:fixed;width:8px;height:13px;border-radius:2px;animation:burst 1.05s cubic-bezier(.15,.8,.3,1) forwards}
+@keyframes burst{to{transform:translate(var(--dx),var(--dy)) rotate(var(--rot));opacity:0}}
+.float{position:fixed;transform:translate(-50%,0);color:var(--good-t);font-weight:800;font-size:28px;animation:up 1s ease-out forwards}
+@keyframes up{to{transform:translate(-50%,-70px);opacity:0}}
+
+/* τέλος + δοκιμές */
+.score{font-size:60px;font-weight:800;color:var(--ink);margin:8px 0 0;line-height:1.1}
+.center{color:var(--muted);margin-bottom:16px}
+.tests{width:100%;border-collapse:collapse;font-size:13px;margin:12px 0}
+.tests td,.tests th{padding:7px 6px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+.tests .ok{color:var(--good-t)} .tests .no{color:var(--bad)}
+.scrollx{overflow-x:auto}
+input[type=number]{width:84px;padding:8px;border-radius:var(--r);border:2px solid var(--line);background:var(--panel)}
+
+/* ειδοποίηση φόρτωσης μοντέλου */
+.toast{position:fixed;left:50%;bottom:calc(16px + env(safe-area-inset-bottom,0px));width:min(92vw,420px);transform:translate(-50%,170%);opacity:0;pointer-events:none;
+  background:var(--ink);color:#fff;border-radius:18px;padding:12px 16px;display:flex;gap:12px;align-items:center;box-shadow:0 14px 34px rgba(22,38,58,.35);
+  transition:transform .5s cubic-bezier(.2,.9,.25,1.2),opacity .3s;z-index:70}
+.toast.show{transform:translate(-50%,0);opacity:1;pointer-events:auto}
+.toast .tx{flex:1;min-width:0}
+.toast b{font-weight:600;display:block}
+.toast small{display:block;opacity:.75;font-size:13px}
+.toast .bar{height:5px;border-radius:3px;background:rgba(255,255,255,.2);margin-top:8px;overflow:hidden}
+.toast .bar i{display:block;height:100%;width:6%;background:var(--accent);transition:width .25s}
+.spin{flex:none;width:24px;height:24px;border-radius:50%;border:3px solid rgba(255,255,255,.25);border-top-color:var(--accent);animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.toast.err{background:#7a1f1f}
+.toast.err .spin,.toast.err .bar{display:none}
+.toast button{background:var(--accent);color:var(--accent-ink);min-height:36px;padding:4px 14px}
+
+.actions{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.actions .primary{grid-column:1/-1}
+.field{display:flex;align-items:center;gap:8px;flex:0 0 auto}
+h2+.center{margin-top:8px}
+.steps i.skip{background:#8d9bad}
+/* πλάκα: emoji + emoji = ? */
+.tile{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:10px 12px;font-size:clamp(36px,10.5vw,56px);line-height:1;letter-spacing:0}
+.head .tile{font-size:clamp(34px,10vw,46px);gap:8px 10px;--lv:#ef4444}
+.em{display:inline-flex;align-items:center;justify-content:center}
+.emj{display:block;width:1em;height:1em;user-select:none;-webkit-user-drag:none}
+.nb{display:inline-flex;align-items:center;gap:12px}
+.sym{font-family:"Lilita One","Geologica",sans-serif;font-weight:400;font-size:.8em;line-height:1;
+  -webkit-text-stroke:2px var(--ink);paint-order:stroke fill;text-shadow:0 3px 0 var(--ink);user-select:none}
+.sym.plus,.sym.eq{font-size:.9em}
+.sym.plus{color:#3b82f6}
+.sym.eq{color:var(--accent)}
+.sym.q{color:var(--lv);font-size:1.15em;animation:pop .6s cubic-bezier(.3,1.6,.5,1) backwards,qwob 2.2s ease-in-out .9s infinite}
+@keyframes qwob{0%,100%{transform:rotate(-8deg) scale(1)}50%{transform:rotate(8deg) scale(1.15)}}
+.ico{width:18px;height:18px;flex:none}
+.back,#quit{display:inline-flex;align-items:center;justify-content:center;gap:8px}
+/* κινούμενη πλάκα στην αρχική */
+.head .tile{min-height:144px;position:relative;overflow:hidden}
+.head .tile .em:not(.q){animation:drop .65s cubic-bezier(.2,1.5,.4,1) backwards}
+.head .tile .sym.q{animation:spin .8s cubic-bezier(.3,1.4,.5,1) backwards,qwob 2.2s ease-in-out .9s infinite}
+@keyframes drop{from{opacity:0;transform:translateY(-46px) rotateX(80deg) scale(.4)}}
+@keyframes spin{from{opacity:0;transform:rotate(-360deg) scale(0)}}
+.head .tile.swap-out .em,.head .tile.swap-out .sym.q{animation:outUp .42s cubic-bezier(.5,0,.8,.3) forwards;animation-delay:calc(var(--k,0)*35ms)!important}
+@keyframes outUp{to{opacity:0;transform:translateY(46px) rotate(18deg) scale(.3);filter:blur(4px)}}
+.head .tile::after{content:"";position:absolute;inset:0;background:linear-gradient(105deg,transparent 35%,rgba(240,180,41,.4) 50%,transparent 65%);transform:translateX(-120%);pointer-events:none}
+.head .tile.sheen::after{animation:sheen .9s ease-out}
+@keyframes sheen{to{transform:translateX(120%)}}
+/* παράθυρο εξαγωγής */
+.modal{position:fixed;inset:0;background:rgba(22,38,58,.55);display:grid;place-items:center;padding:16px;z-index:80;animation:fade .25s}
+@keyframes fade{from{opacity:0}}
+.mcard{position:relative;width:min(100%,460px);background:var(--panel);border:2px solid var(--ink);border-radius:20px;box-shadow:0 8px 0 var(--ink);padding:24px;display:flex;flex-direction:column;gap:16px;animation:rise .45s cubic-bezier(.2,.9,.3,1.2)}
+.mcard h2{padding-right:48px}
+.mclose{position:absolute;top:14px;right:14px;width:40px;min-height:40px;padding:0;display:grid;place-items:center}
+.mlabel{font-weight:600;font-size:14px;color:var(--muted);margin-bottom:-8px}
+.mseg,.mactions{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.mseg button{min-height:52px;padding:8px 10px;background:transparent;box-shadow:inset 0 0 0 2px var(--line);font-size:14px;color:var(--muted)}
+.mseg button[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink);box-shadow:none}
+.mbar{height:8px;border-radius:4px;background:var(--line);overflow:hidden;margin-bottom:8px}
+.mbar i{display:block;height:100%;width:0;background:var(--accent);transition:width .2s}
+/* μεγαλύτερα στοιχεία μόνο σε υπολογιστή */
+@media (min-width:900px) and (hover:hover) and (pointer:fine){
+  body{font-size:18px}
+  main{max-width:680px;padding-top:36px}
+  h1{font-size:44px} h2{font-size:28px}
+  button{min-height:54px;padding:14px 22px;font-size:17px}
+  .back,.top button{min-height:44px;padding:8px 18px;font-size:16px}
+  .tile{font-size:72px;gap:12px 18px;padding:36px 16px}
+  .head .tile{font-size:62px;min-height:210px}
+  .card b{font-size:40px}.card span{font-size:18px}.card small{font-size:14px}
+  .opt{min-height:140px}.opt b{font-size:48px}
+  .start{min-height:70px;font-size:22px}
+  textarea{font-size:19px;min-height:104px}
+  .reveal{font-size:24px}.hintbox{font-size:17px}
+  .pts{font-size:21px}.mid b{font-size:21px}
+  .steps i{height:10px}
+  .toast{width:460px}.mcard{width:520px}
+  .foot button{font-size:15px;min-height:40px;padding:0 8px}
+}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+</style>
+</head>
+<body>
+<main>
+
+<section id="home">
+  <header class="head">
+    <h1>Emoji Παροιμίες</h1>
+    <p>Βρες την παροιμία που κρύβεται πίσω από τα emoji.</p>
+    <div class="tile" id="heroTile" aria-hidden="true"></div>
+  </header>
+  <div class="path">
+    <div class="card" style="--i:0"><span class="easy">Εύκολο</span><b>5</b><small>ερωτήσεις</small></div>
+    <div class="card" style="--i:1"><span class="med">Μεσαίο</span><b>10</b><small>ερωτήσεις</small></div>
+    <div class="card" style="--i:2"><span class="hard">Δύσκολο</span><b>5</b><small>ερωτήσεις</small></div>
+  </div>
+  <button class="primary start" id="start">Ξεκίνα</button>
+  <div class="foot"><button id="goExport">Εξαγωγή για εκδήλωση</button><button id="goTest">Δοκιμές βαθμονόμησης</button></div>
+</section>
+
+<section id="setup" hidden>
+  <button class="ghost back" id="setupBack"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5"/><path d="M11 6l-6 6 6 6"/></svg>Πίσω</button>
+  <h2>Πόσος χρόνος ανά ερώτηση;</h2>
+  <p class="muted" style="margin-top:8px">Όσο πιο γρήγορα απαντάς, τόσο περισσότεροι οι βαθμοί.</p>
+  <div class="opts" id="opts"></div>
+</section>
+
+<section id="game" hidden>
+  <div class="top">
+    <button class="ghost" id="quit"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11.5 12 4l9 7.5"/><path d="M5.5 10v9.5a1 1 0 0 0 1 1H10v-6h4v6h3.5a1 1 0 0 0 1-1V10"/></svg>Αρχική</button>
+    <div class="mid"><b id="lvName"></b><small id="qn"></small></div>
+    <span class="pts" id="score">0 β.</span>
+  </div>
+  <div class="steps" id="steps"></div>
+  <div class="timer" id="timer" hidden><i id="timerFill"></i></div>
+  <div class="tile" id="tile" aria-label="Emoji της παροιμίας"></div>
+  <div class="hintbox" id="hintbox" hidden></div>
+  <div id="play" hidden>
+    <textarea id="answer" rows="2" placeholder="Γράψε την παροιμία ή το νόημά της…" autocomplete="off" autocapitalize="sentences"></textarea>
+    <div class="msg" id="msg" aria-live="polite"></div>
+    <div class="actions">
+      <button class="primary" id="check">Έλεγχος</button>
+      <button class="ghost" id="hint">Υπόδειξη (3)</button>
+      <button class="ghost" id="giveup">Τα παρατάω</button>
+    </div>
+  </div>
+  <div id="after" hidden>
+    <div class="reveal" id="reveal"></div>
+    <button class="primary" id="next" style="width:100%"></button>
+  </div>
+</section>
+
+<section id="end" hidden>
+  <header class="head"><h1>Τέλος παιχνιδιού</h1></header>
+  <div class="score" id="endScore">0 β.</div>
+  <p class="center" id="endInfo"></p>
+  <div class="path" id="endPath"></div>
+  <div class="row">
+    <button class="primary" id="again">Παίξε ξανά</button>
+    <button class="ghost" id="toHome">Αρχική</button>
+  </div>
+</section>
+
+<!-- ΔΟΚΙΜΕΣ -->
+<section id="test" hidden>
+  <button class="ghost back" id="testBack"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11.5 12 4l9 7.5"/><path d="M5.5 10v9.5a1 1 0 0 0 1 1H10v-6h4v6h3.5a1 1 0 0 0 1-1V10"/></svg>Αρχική</button>
+  <h2>Βαθμονόμηση κατωφλίου</h2>
+  <p class="center">Εργαλείο για σένα: τρέχει παραδείγματα, δείχνει την ομοιότητα και ρυθμίζεις το κατώφλι.</p>
+  <div class="row">
+    <label class="field">Κατώφλι <input type="number" id="thr" min="0" max="1" step="0.01"></label>
+    <label class="field">Περιθώριο <input type="number" id="mar" min="0" max="1" step="0.01"></label>
+    <button class="primary" id="runTests">Εκτέλεση δοκιμών</button>
+  </div>
+  <div class="scrollx"><table class="tests" id="tests"></table></div>
+</section>
+
+</main>
+
+<div id="flash" aria-hidden="true"></div>
+<div id="banner" aria-hidden="true"><div><b id="bName"></b><span id="bSub"></span></div></div>
+<div id="fx" aria-hidden="true"></div>
+<div class="modal" id="exportModal" hidden>
+  <div class="mcard" id="mCard" role="dialog" aria-modal="true" aria-labelledby="mTitle">
+    <button class="ghost mclose" id="mClose" aria-label="Κλείσιμο"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+    <h2 id="mTitle">Εξαγωγή παιχνιδιού</h2>
+    <p class="muted">Φτιάχνει ένα νέο παιχνίδι με 20 ερωτήσεις (5 εύκολες, 10 μεσαίες, 5 δύσκολες) για προβολή σε τάξη ή εκδήλωση, χωρίς να χρειάζονται κινητά. Το PDF είναι διανυσματικό, δηλαδή καθαρό σε κάθε μεγέθυνση.</p>
+    <div class="mlabel">Πότε εμφανίζονται οι απαντήσεις</div>
+    <div class="mseg" id="ansSeg"><button data-v="after" aria-pressed="true">Μετά από κάθε ερώτηση</button><button data-v="end" aria-pressed="false">Όλες στο τέλος</button></div>
+    <div class="mactions"><button class="primary" id="exPdf">PDF</button><button class="ghost" id="exPptx">Παρουσίαση (.pptx)</button></div>
+    <div class="mprog" id="mProg" hidden><div class="mbar"><i id="mFill"></i></div><small id="mText" class="muted"></small></div>
+  </div>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite">
+  <span class="spin"></span>
+  <div class="tx"><b id="sText"></b><small id="sSub"></small><div class="bar"><i id="sFill"></i></div></div>
+  <button id="sRetry" hidden>Ξανά</button>
+</div>
+
+<script type="module">
+/* =====================================================================
+ *  ΜΟΝΑΔΑ ΟΜΟΙΟΤΗΤΑΣ (Similarity) — τοπικό AI στον browser, χωρίς backend.
+ *  Για να αλλάξεις μοντέλο, άλλαξε ΜΟΝΟ το CONFIG παρακάτω.
+ *  Η συνάρτηση check() επιστρέφει αυστηρά { similar: true } ή { similar: false }.
+ * ===================================================================== */
+const CONFIG = {
+  library: "https://cdn.jsdelivr.net/npm/@huggingface/transformers@3.0.2/+esm",
+  model:   "Xenova/all-MiniLM-L6-v2",   // π.χ. "Xenova/paraphrase-multilingual-MiniLM-L12-v2" για καλύτερα ελληνικά
+  dtype:   "q8",                         // κβαντισμένο: μικρότερο και γρηγορότερο σε φθηνά κινητά
+  threshold: 0.72,                       // ελάχιστη ομοιότητα με την παροιμία ή το νόημά της
+  margin: 0.07,                          // πόσο πιο κοντά πρέπει να είναι από κάθε ΑΛΛΗ παροιμία
+  lexical: { minOverlap: 0.7, minCos: 0.5 }, // εναλλακτική διαδρομή: σχεδόν ίδιες λέξεις + ελάχιστη ομοιότητα
+  minWords: 3,                           // μονολεκτικές απαντήσεις δεν γίνονται δεκτές
+  guards: { negation: true, numbers: true }
+};
+
+const Similarity = (() => {
+  let extractor = null, loading = null;
+  const vecCache = new Map();
+  const files = new Map();
+
+  // --- Κανονικοποίηση ελληνικών: πεζά, χωρίς τόνους, τελικό ς → σ
+  const norm = s => (s || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+    .replace(/ς/g, "σ").replace(/[^\p{L}\p{N}\s]/gu, " ").replace(/\s+/g, " ").trim();
+
+  // --- Έλεγχοι ασφαλείας: η σημασιολογική ομοιότητα δεν ξεχωρίζει καλά άρνηση ή αριθμούς
+  const NEG = new Set(["δεν", "μη", "μην", "ουτε", "οχι", "καθολου"]);
+  const NUMW = { ενα:1, ενας:1, μια:1, μιας:1, εναν:1, δυο:2, τρια:3, τρεις:3, τεσσερα:4, τεσσερις:4, πεντε:5, εξι:6, επτα:7, οκτω:8, εννια:9, δεκα:10 };
+  const hasNeg = n => n.split(" ").some(w => NEG.has(w));
+  const nums = n => new Set(n.split(" ").map(w => /^\d+$/.test(w) ? +w : NUMW[w]).filter(x => x !== undefined && x !== 1));
+  function guardsOk(a, b) {
+    const A = norm(a), B = norm(b);
+    if (CONFIG.guards.negation && hasNeg(A) !== hasNeg(B)) return false;
+    if (CONFIG.guards.numbers) {
+      const x = nums(A), y = nums(B);
+      if (x.size && y.size && [...x].join() !== [...y].join()) return false;
+    }
+    return true;
+  }
+
+  // --- Επικάλυψη λέξεων (με κοπή στα 5 γράμματα, χωρίς συνηθισμένες λέξεις)
+  const STOP = new Set(["οποιοσ","οποιος","οσο","και","την","τον","του","της","των","τις","στο","στη","στον","απο","για","που","οτι","ειναι","μου","σου","μια","ενα","οι","τα","το","να","με","σε"]);
+  const stems = n => new Set(n.split(" ").filter(w => w.length > 2 && !STOP.has(w)).map(w => w.slice(0, 5)));
+  function lexical(ref, user) {
+    const r = stems(norm(ref)), u = stems(norm(user));
+    if (!r.size) return 0;
+    let c = 0; r.forEach(x => { if (u.has(x)) c++; });
+    return c / r.size;
+  }
+
+  // --- Φόρτωση μοντέλου (μία φορά· cache στο Cache API του browser)
+  function load(onProgress) {
+    if (extractor) return Promise.resolve(extractor);
+    if (loading) return loading;
+    loading = (async () => {
+      const mod = await import(CONFIG.library);
+      mod.env.allowLocalModels = false;
+      mod.env.useBrowserCache = true;
+      try { mod.env.backends.onnx.wasm.numThreads = 1; mod.env.backends.onnx.wasm.proxy = false; } catch (e) {}
+      extractor = await mod.pipeline("feature-extraction", CONFIG.model, {
+        dtype: CONFIG.dtype,
+        progress_callback: p => {
+          if (p.status === "progress" && p.file) {
+            files.set(p.file, { loaded: p.loaded || 0, total: p.total || 0 });
+            let l = 0, t = 0; files.forEach(f => { l += f.loaded; t += f.total; });
+            onProgress && t && onProgress(Math.min(100, Math.round(l / t * 100)));
+          }
+        }
+      });
+      return extractor;
+    })().catch(e => { loading = null; extractor = null; throw e; });
+    return loading;
+  }
+
+  async function embed(text) {
+    const key = norm(text);
+    if (vecCache.has(key)) return vecCache.get(key);
+    const ex = await load();
+    const out = await ex(text.trim(), { pooling: "mean", normalize: true });
+    const v = new Float32Array(out.data);
+    if (vecCache.size > 400) vecCache.clear();
+    vecCache.set(key, v);
+    return v;
+  }
+  const cosine = (a, b) => { let s = 0; for (let i = 0; i < a.length; i++) s += a[i] * b[i]; return s; }; // τα διανύσματα είναι κανονικοποιημένα
+
+  // Προϋπολογισμός embeddings στο παρασκήνιο, ώστε ο έλεγχος να είναι άμεσος
+  async function warm(sentences) {
+    for (const t of sentences) { await embed(t); await new Promise(r => setTimeout(r, 0)); }
+  }
+
+  // Μετρικές: ομοιότητα με την αναφορά και με την πιο κοντινή ΑΛΛΗ παροιμία
+  async function metrics(refs, userText, rivals = []) {
+    const u = await embed(userText);
+    let best = null, bestAny = null, lex = 0;
+    for (const r of refs) {
+      const s = cosine(u, await embed(r));
+      if (!bestAny || s > bestAny) bestAny = s;
+      if (!guardsOk(r, userText)) continue;
+      if (best === null || s > best) best = s;
+      lex = Math.max(lex, lexical(r, userText));
+    }
+    let rival = 0;
+    for (const r of rivals) rival = Math.max(rival, cosine(u, await embed(r)));
+    return { score: best ?? bestAny, lex, rival, guards: best !== null };
+  }
+
+  // Απόφαση: αυστηρή, με βάση το τρέχον CONFIG
+  function decide(m) {
+    if (!m.guards) return false;
+    if (m.lex >= CONFIG.lexical.minOverlap && m.score >= CONFIG.lexical.minCos && m.score >= m.rival) return true;
+    return m.score >= CONFIG.threshold && m.score - m.rival >= CONFIG.margin;
+  }
+
+  // --- Δημόσιο API ---
+  // refs: προτάσεις αναφοράς · rivals: οι υπόλοιπες παροιμίες. Επιστρέφει ΜΟΝΟ { similar: boolean }.
+  async function check(refs, userText, rivals = []) {
+    refs = [].concat(refs);
+    const n = norm(userText);
+    if (n.split(" ").filter(Boolean).length < CONFIG.minWords) return { similar: false };
+    if (refs.some(r => norm(r) === n)) return { similar: true };
+    return { similar: decide(await metrics(refs, userText, rivals)) };
+  }
+  // Μόνο για τη σελίδα βαθμονόμησης:
+  const debug = (refs, userText, rivals) => metrics([].concat(refs), userText, rivals);
+  return { load, check, debug, decide, warm, norm };
+})();
+
+/* =====================================================================
+ *  ΠΑΡΟΙΜΙΕΣ — δοκιμαστικό σετ (θα το αντικαταστήσεις αργότερα)
+ *  e: emoji · t: παροιμία · alt: το νόημα με απλά λόγια · lv: 1 εύκολη, 2 μεσαία, 3 δύσκολη
+ *  Το παιχνίδι χρειάζεται τουλάχιστον 5 εύκολες, 10 μεσαίες και 5 δύσκολες.
+ * ===================================================================== */
+const PROVERBS = [
+  { e:"🔎➡️✅", t:"Όποιος ψάχνει βρίσκει", alt:"Όποιος προσπαθεί και ψάχνει καταφέρνει να βρει αυτό που θέλει", lv:1 },
+  { e:"🐦1️⃣🚫🌸", t:"Ένα χελιδόνι δεν φέρνει την άνοιξη", alt:"Ένα μόνο σημάδι δεν αρκεί για να βγάλεις συμπέρασμα", lv:1 },
+  { e:"⏰🐢✅", t:"Κάλλιο αργά παρά ποτέ", alt:"Είναι καλύτερα να γίνει κάτι καθυστερημένα παρά να μη γίνει καθόλου", lv:1 },
+  { e:"🏃💨🪨😵", t:"Όποιος βιάζεται σκοντάφτει", alt:"Όταν βιαζόμαστε κάνουμε λάθη", lv:1 },
+  { e:"🌅👀☀️", t:"Η καλή μέρα από το πρωί φαίνεται", alt:"Η καλή αρχή δείχνει πώς θα εξελιχθεί κάτι", lv:1 },
+  { e:"💰😊🚫", t:"Τα λεφτά δεν φέρνουν την ευτυχία", alt:"Τα χρήματα από μόνα τους δεν κάνουν τον άνθρωπο ευτυχισμένο", lv:1 },
+  { e:"🐕🗯️🚫🦷", t:"Σκυλί που γαβγίζει δεν δαγκώνει", alt:"Όσοι απειλούν δυνατά σπάνια περνούν στην πράξη", lv:1 },
+  { e:"🍎🌳⬇️", t:"Το μήλο κάτω από τη μηλιά θα πέσει", alt:"Τα παιδιά μοιάζουν στους γονείς τους", lv:1 },
+  { e:"🥚🥚🧺☝️🚫", t:"Μην βάζεις όλα τα αυγά σε ένα καλάθι", alt:"Μην ρισκάρεις τα πάντα σε ένα μόνο πράγμα", lv:2 },
+  { e:"🏛️🧱1️⃣☀️🚫", t:"Η Ρώμη δεν χτίστηκε σε μια μέρα", alt:"Τα μεγάλα πράγματα θέλουν χρόνο και υπομονή", lv:2 },
+  { e:"💧💧🏺", t:"Σταλαγματιά σταλαγματιά γεμίζει η στάμνα", alt:"Με μικρές συνεχόμενες προσπάθειες φτάνεις σε μεγάλο αποτέλεσμα", lv:2 },
+  { e:"🗿🔄🌿🚫", t:"Πέτρα που κυλά δεν παίρνει μούσκλια", alt:"Όποιος αλλάζει συνέχεια δουλειά ή τόπο δεν σταθεροποιείται ούτε κερδίζει", lv:2 },
+  { e:"🌬️🌾🌪️", t:"Όποιος σπέρνει ανέμους θερίζει τρικυμίες", alt:"Όποιος κάνει κακό θα πάρει πίσω μεγαλύτερο κακό", lv:2 },
+  { e:"👀🚫💔💨", t:"Μάτια που δεν βλέπονται γρήγορα λησμονιούνται", alt:"Όταν δεν βλέπεις κάποιον πια, τον ξεχνάς", lv:2 },
+  { e:"🍉🍉💪🚫", t:"Δύο καρπούζια σε μια μασχάλη δεν χωράνε", alt:"Δεν μπορείς να κάνεις καλά δύο μεγάλες δουλειές ταυτόχρονα", lv:2 },
+  { e:"🌊😰💇", t:"Ο πνιγμένος από τα μαλλιά του πιάνεται", alt:"Στην απελπισία κανείς προσκολλάται και στην πιο αδύναμη ελπίδα", lv:2 },
+  { e:"🏁🥇½", t:"Η αρχή είναι το ήμισυ του παντός", alt:"Το πιο δύσκολο είναι να ξεκινήσεις, μετά όλα πάνε πιο εύκολα", lv:2 },
+  { e:"🌰🌰🛍️", t:"Φασούλι το φασούλι γεμίζει το σακούλι", alt:"Με μικρές οικονομίες μαζεύεται μεγάλο ποσό", lv:2 },
+  { e:"👅🦴💥", t:"Η γλώσσα κόκκαλα δεν έχει και κόκκαλα τσακίζει", alt:"Τα λόγια μπορούν να πληγώσουν βαθιά", lv:3 },
+  { e:"🛌🐕🦟", t:"Όποιος κοιμάται με τα σκυλιά ξυπνά με ψύλλους", alt:"Όποιος συναναστρέφεται κακούς ανθρώπους θα πάθει ζημιά", lv:3 },
+  { e:"🐟📅🥬", t:"Κάθε πράγμα στον καιρό του και τα ραδίκια τον Αύγουστο", alt:"Όλα πρέπει να γίνονται την κατάλληλη στιγμή", lv:3 },
+  { e:"🐺👴🔁🧠🚫", t:"Ο λύκος κι αν εγέρασε κι άλλαξε το μαλλί του, γνώμη δεν άλλαξε", alt:"Ο άνθρωπος αλλάζει εμφάνιση με τα χρόνια αλλά όχι χαρακτήρα", lv:3 },
+  { e:"🐦‍⬛🐦‍⬛👁️🚫", t:"Ο κόρακας τον κόρακα δεν βγάζει το μάτι", alt:"Οι όμοιοι και οι συνένοχοι δεν προδίδουν ο ένας τον άλλον", lv:3 },
+];
+const rivalsFor = p => PROVERBS.filter(x => x !== p).flatMap(x => [x.t, x.alt]);
+
+const LEVELS = [
+  { lv:1, name:"Εύκολο", n:5,  cls:"easy", c:"#22c55e", s:"#22c55e", t:"#178a48" },
+  { lv:2, name:"Μεσαίο", n:10, cls:"med",  c:"#facc15", s:"#eab308", t:"#a87400" },
+  { lv:3, name:"Δύσκολο", n:5, cls:"hard", c:"#ef4444", s:"#ef4444", t:"#d62f2f" },
+];
+const TIMES = [ {s:0, big:"∞", label:"Χωρίς χρόνο"}, {s:30, big:"30", label:"δευτερόλεπτα"}, {s:60, big:"60", label:"δευτερόλεπτα"}, {s:90, big:"90", label:"δευτερόλεπτα"} ];
+
+/* =====================================================================
+ *  ΕΦΑΡΜΟΓΗ
+ * ===================================================================== */
+const $ = id => document.getElementById(id);
+const calm = matchMedia("(prefers-reduced-motion: reduce)").matches;
+const shuffle = a => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.random() * (i + 1) | 0; [a[i], a[j]] = [a[j], a[i]]; } return a; };
+const wait = ms => new Promise(r => setTimeout(r, ms));
+function restart(el, c) { el.classList.remove(c); void el.offsetWidth; el.classList.add(c); }
+function show(id) {
+  ["home","setup","game","end","test"].forEach(s => $(s).hidden = s !== id);
+  restart($(id), "enter"); window.scrollTo(0, 0);
+}
+
+/* ---- εφέ ---- */
+const COLORS = ["#f0b429","#22c55e","#ef4444","#3b82f6","#a855f7","#facc15"];
+const centerOf = el => { const r = el.getBoundingClientRect(); return [r.left + r.width / 2, r.top + r.height / 2]; };
+function confetti(x, y, n = 32) {
+  if (calm) return;
+  for (let i = 0; i < n; i++) {
+    const d = document.createElement("i"), a = Math.random() * Math.PI * 2, v = 90 + Math.random() * 170;
+    d.className = "conf";
+    d.style.cssText = `left:${x}px;top:${y}px;background:${COLORS[i % COLORS.length]};--dx:${Math.cos(a) * v}px;--dy:${Math.sin(a) * v + 100}px;--rot:${Math.random() * 720 - 360}deg`;
+    $("fx").appendChild(d); setTimeout(() => d.remove(), 1100);
+  }
+}
+function floatText(txt, el) {
+  if (calm) return;
+  const [x, y] = centerOf(el), f = document.createElement("b");
+  f.className = "float"; f.textContent = txt; f.style.left = x + "px"; f.style.top = y + "px";
+  $("fx").appendChild(f); setTimeout(() => f.remove(), 1000);
+}
+function countUp(el, from, to, suffix = " β.", ms = 700) {
+  if (calm || from === to) { el.textContent = to + suffix; return; }
+  const t0 = performance.now();
+  (function f(t) { const k = Math.min(1, (t - t0) / ms); el.textContent = Math.round(from + (to - from) * k) + suffix; if (k < 1) requestAnimationFrame(f); })(t0);
+}
+/* Emoji ως εικόνες Twemoji: ίδια εμφάνιση σε Windows 10, Android, iOS, macOS κ.ά. (αν δεν φορτώσουν, μπαίνει το native emoji) */
+const TW = "https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.0.3/assets/svg/";
+const GLYPH = /[0-9#*]\uFE0F?\u20E3|\p{Extended_Pictographic}(?:\uFE0F|\u200d\p{Extended_Pictographic}\uFE0F?|\p{Emoji_Modifier})*|[\s\S]/gu;
+const isEmoji = g => /^(?:[0-9#*]\uFE0F?\u20E3|\p{Extended_Pictographic})/u.test(g);
+const twFile = g => [...g].map(c => c.codePointAt(0).toString(16)).filter(c => g.includes("\u200d") || c !== "fe0f").join("-");
+function preload(str) { (str.match(GLYPH) || []).forEach(g => { if (isEmoji(g)) new Image().src = TW + twFile(g) + ".svg"; }); }
+function glyphNode(g) {
+  const w = document.createElement("span"); w.className = "em";
+  if (!isEmoji(g)) { w.textContent = g; return w; }
+  const img = new Image(); img.className = "emj"; img.alt = g; img.draggable = false; img.decoding = "async";
+  img.onerror = () => { w.textContent = g; };
+  img.src = TW + twFile(g) + ".svg"; w.appendChild(img);
+  return w;
+}
+function symNode(c, cls) { const s = document.createElement("span"); s.className = "em sym " + cls; s.textContent = c; return s; }
+function renderEmoji(el, str) {
+  el.textContent = "";
+  const parts = (str.match(GLYPH) || []).filter(g => g.trim());
+  let k = 0; const add = (parent, n) => { n.style.animationDelay = (k * 80) + "ms"; n.style.setProperty("--k", k++); parent.appendChild(n); };
+  parts.forEach((g, i) => { if (i) add(el, symNode("+", "plus")); add(el, glyphNode(g)); });
+  const nb = document.createElement("span"); nb.className = "nb"; el.appendChild(nb);
+  add(nb, symNode("=", "eq")); add(nb, symNode("?", "q"));
+}
+function levelIntro(L) {
+  document.body.style.setProperty("--lv", L.c); document.body.style.setProperty("--lvt", L.t);
+  $("bName").textContent = L.name; $("bSub").textContent = L.n + " ερωτήσεις";
+  restart($("flash"), "go"); restart(document.querySelector("main"), "shake"); restart($("banner"), "show");
+  confetti(innerWidth / 2, innerHeight / 2, 26);
+  return wait(calm ? 500 : 1700).then(() => $("banner").classList.remove("show"));
+}
+
+/* ---- ειδοποίηση φόρτωσης μοντέλου (εμφανίζεται μόνο όσο φορτώνει ή αν αποτύχει) ---- */
+let modelState = "idle";
+function setStatus(state, pct) {
+  modelState = state;
+  const t = $("toast");
+  t.classList.toggle("show", state === "loading" || state === "error");
+  t.classList.toggle("err", state === "error");
+  $("sRetry").hidden = state !== "error";
+  $("sFill").style.width = Math.max(6, pct || 0) + "%";
+  $("sText").textContent = state === "error" ? "Δεν φορτώθηκε το μοντέλο" : "Φορτώνω το μοντέλο ομοιότητας" + (pct ? " · " + pct + "%" : "…");
+  $("sSub").textContent = state === "error" ? "Έλεγξε τη σύνδεση και δοκίμασε ξανά." : "Γίνεται μία φορά· μετά δουλεύει και χωρίς σύνδεση.";
+}
+async function loadModel() {
+  if (modelState === "loading" || modelState === "ready") return;
+  setStatus("loading", 0);
+  try { await Similarity.load(p => setStatus("loading", p)); setStatus("ready"); Similarity.warm(PROVERBS.flatMap(p => [p.t, p.alt])).catch(() => {}); }
+  catch (e) { console.error(e); setStatus("error"); }
+}
+$("sRetry").onclick = loadModel;
+
+/* ---- αρχική και επιλογή χρόνου ---- */
+preload("🐦1️⃣🚫🌸"); renderEmoji($("heroTile"), "🐦1️⃣🚫🌸");
+$("start").onclick = () => show("setup");
+$("setupBack").onclick = () => show("home");
+TIMES.forEach((o, i) => {
+  const b = document.createElement("button");
+  b.className = "opt"; b.style.setProperty("--i", i);
+  b.innerHTML = "<b></b><span></span>"; b.firstChild.textContent = o.big; b.lastChild.textContent = o.label;
+  b.onclick = () => { b.classList.add("picked"); confetti(...centerOf(b), 18); setTimeout(() => { b.classList.remove("picked"); timerSecs = o.s; startGame(); }, calm ? 0 : 380); };
+  $("opts").appendChild(b);
+});
+
+/* ---- παιχνίδι: 5 εύκολες, 10 μεσαίες, 5 δύσκολες ---- */
+let results = [], timerSecs = 0, pool = [], idx = 0, total = 0, shown = 0, hintsUsed = 0, timeLeft = 0, tick = null, locked = true, checking = false, run = 0, stats = {};
+const buildPool = () => LEVELS.flatMap(L => shuffle(PROVERBS.filter(p => p.lv === L.lv)).slice(0, L.n).map(p => ({ p, L })));
+
+function startGame() {
+  const my = ++run;
+  pool = buildPool(); results = []; idx = 0; total = 0; shown = 0; stats = { 1: 0, 2: 0, 3: 0 };
+  $("score").textContent = "0 β."; $("steps").innerHTML = "";
+  pool.forEach(x => preload(x.p.e)); show("game"); loadModel(); nextQuestion(my);
+}
+function renderSteps() {
+  const st = $("steps");
+  if (!st.children.length) pool.forEach((x, i) => { const e = document.createElement("i"); e.style.setProperty("--c", x.L.s); if (i && pool[i - 1].L !== x.L) e.className = "gap"; st.appendChild(e); });
+  [...st.children].forEach((e, i) => { e.classList.toggle("done", results[i] === 1); e.classList.toggle("skip", results[i] === 0); e.classList.toggle("cur", i === idx && results[i] === undefined); });
+}
+async function nextQuestion(my) {
+  clearInterval(tick); locked = true;
+  if (idx >= pool.length) return finish();
+  const { p, L } = pool[idx];
+  ["play","after","hintbox","timer"].forEach(i => $(i).hidden = true);
+  $("tile").textContent = ""; $("tile").classList.remove("win", "lose");
+  renderSteps();
+  if (idx === 0 || pool[idx - 1].L !== L) { await levelIntro(L); if (my !== run) return; }
+  document.body.style.setProperty("--lv", L.c); document.body.style.setProperty("--lvt", L.t);
+  $("lvName").textContent = L.name; $("lvName").className = L.cls;
+  $("qn").textContent = (pool.slice(0, idx).filter(x => x.L === L).length + 1) + " / " + L.n;
+  renderEmoji($("tile"), p.e); restart($("tile"), "flip");
+  hintsUsed = 0; locked = false;
+  $("hintbox").innerHTML = "";
+  const a = $("answer"); a.value = ""; a.disabled = false; a.classList.remove("wrong");
+  $("msg").textContent = ""; $("msg").className = "msg";
+  $("play").hidden = false; restart($("play"), "enter");
+  $("hint").disabled = false; $("hint").textContent = "Υπόδειξη (3)"; $("check").disabled = false; $("check").textContent = "Έλεγχος";
+  startTimer();
+  if (!calm) setTimeout(() => a.focus({ preventScroll: true }), 400);
+}
+
+function startTimer() {
+  clearInterval(tick);
+  $("timer").hidden = !timerSecs;
+  if (!timerSecs) return;
+  timeLeft = timerSecs;
+  const fill = $("timerFill");
+  $("timer").classList.remove("low");
+  fill.style.transition = "none"; fill.style.width = "100%";
+  requestAnimationFrame(() => requestAnimationFrame(() => { fill.style.transition = ""; }));
+  tick = setInterval(() => {
+    timeLeft--;
+    fill.style.width = Math.max(0, timeLeft / timerSecs * 100) + "%";
+    $("timer").classList.toggle("low", timeLeft <= 10);
+    if (timeLeft <= 0) { clearInterval(tick); endQuestion(false, true); }
+  }, 1000);
+}
+
+function hintTexts(t) {
+  const w = t.replace(/[.,;!?]/g, "").split(/\s+/);
+  const mask = x => x[0] + "_".repeat(Math.max(0, x.length - 1));
+  return ["Η παροιμία έχει " + w.length + " λέξεις.", w.map(mask).join(" "), w.map((x, i) => i < 2 ? x : mask(x)).join(" ")];
+}
+$("hint").onclick = () => {
+  if (locked || hintsUsed >= 3) return;
+  const hs = hintTexts(pool[idx].p.t);
+  hintsUsed++;
+  const box = $("hintbox"); box.hidden = false; box.innerHTML = "";
+  for (let i = 0; i < hintsUsed; i++) { const d = document.createElement("div"); d.textContent = hs[i]; if (i) d.className = "mono"; box.appendChild(d); }
+  $("hint").textContent = hintsUsed >= 3 ? "Καμία άλλη υπόδειξη" : "Υπόδειξη (" + (3 - hintsUsed) + ")";
+  if (hintsUsed >= 3) $("hint").disabled = true;
+};
+
+async function submit() {
+  if (locked || checking) return;
+  const text = $("answer").value.trim();
+  if (!text) return;
+  checking = true; $("check").disabled = true; $("check").textContent = "Έλεγχος…";
+  $("msg").className = "msg"; $("msg").textContent = modelState === "ready" ? "" : "Φόρτωση μοντέλου, περίμενε λίγο…";
+  try {
+    const p = pool[idx].p;
+    const result = await Similarity.check([p.t, p.alt], text, rivalsFor(p));   // { similar: true | false }
+    setStatus("ready"); $("msg").textContent = "";
+    if (result.similar) endQuestion(true);
+    else {
+      $("msg").className = "msg bad"; $("msg").textContent = "Όχι ακριβώς. Δοκίμασε ξανά!";
+      const a = $("answer"); restart(a, "shake"); a.classList.add("wrong"); setTimeout(() => a.classList.remove("wrong"), 700);
+    }
+  } catch (e) {
+    console.error(e); setStatus("error");
+    $("msg").className = "msg bad"; $("msg").textContent = "Η σύγκριση απέτυχε. Δοκίμασε ξανά όταν φορτώσει το μοντέλο.";
+  } finally { checking = false; if (!locked) { $("check").disabled = false; $("check").textContent = "Έλεγχος"; } }
+}
+$("check").onclick = submit;
+$("answer").addEventListener("keydown", e => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); submit(); } });
+$("giveup").onclick = () => { if (!locked) endQuestion(false); };
+
+function endQuestion(won, timeout) {
+  locked = true; clearInterval(tick);
+  const { p, L } = pool[idx], tile = $("tile");
+  let gained = 0;
+  if (won) { gained = Math.max(25, 100 - hintsUsed * 25) + (timerSecs ? Math.round(timeLeft / timerSecs * 20) : 0); total += gained; stats[L.lv]++; }
+  results[idx] = won ? 1 : 0; renderSteps();
+  countUp($("score"), shown, total); shown = total; if (won) restart($("score"), "bump");
+  $("answer").disabled = true; $("play").hidden = true; $("after").hidden = false;
+  if (won) { restart(tile, "win"); confetti(...centerOf(tile)); floatText("+" + gained, tile); }
+  else restart(tile, "lose");
+  const r = $("reveal"); r.className = "reveal " + (won ? "won" : "gave"); r.innerHTML = "";
+  r.append(document.createTextNode(p.t));
+  const s = document.createElement("small");
+  s.textContent = won ? "Μπράβο! +" + gained + " βαθμοί" : timeout ? "Τέλος χρόνου" : "Η σωστή απάντηση";
+  r.appendChild(s);
+  $("next").textContent = idx + 1 >= pool.length ? "Δες το αποτέλεσμα" : (pool[idx + 1].L !== L ? "Επόμενο επίπεδο" : "Επόμενη παροιμία");
+  $("next").focus({ preventScroll: true });
+}
+$("next").onclick = () => { idx++; renderSteps(); nextQuestion(run); };
+
+function finish() {
+  clearInterval(tick); show("end");
+  countUp($("endScore"), 0, total, " β.", 1200);
+  const right = stats[1] + stats[2] + stats[3];
+  $("endInfo").textContent = "Βρήκες " + right + " από " + pool.length + " παροιμίες.";
+  $("endPath").innerHTML = "";
+  LEVELS.forEach((L, i) => {
+    const c = document.createElement("div"); c.className = "card"; c.style.setProperty("--i", i);
+    c.innerHTML = "<span></span><b></b><small>σωστές</small>"; c.children[0].textContent = L.name; c.children[0].className = L.cls; c.children[1].textContent = stats[L.lv] + "/" + L.n;
+    $("endPath").appendChild(c);
+  });
+  [0, 250, 550].forEach((d, i) => setTimeout(() => confetti(innerWidth * (0.25 + i * 0.25), innerHeight * 0.35, 36), d));
+}
+$("again").onclick = () => show("setup");
+$("toHome").onclick = () => show("home");
+$("quit").onclick = () => { run++; clearInterval(tick); $("banner").classList.remove("show"); show("home"); };
+
+/* ---- κινούμενη πλάκα στην αρχική: αλλάζει παροιμίες για να φαίνεται το περιεχόμενο ---- */
+const heroSets = ["🐦1️⃣🚫🌸", ...shuffle(PROVERBS.map(p => p.e).filter(e => e !== "🐦1️⃣🚫🌸"))];
+let heroI = 0, heroBusy = false;
+async function heroNext() {
+  if (heroBusy || document.hidden || $("home").hidden) return;
+  heroBusy = true;
+  const t = $("heroTile"), next = heroSets[(heroI + 1) % heroSets.length];
+  preload(next);
+  t.classList.add("swap-out");
+  await wait(calm ? 0 : 420 + t.querySelectorAll(".em").length * 35);
+  heroI = (heroI + 1) % heroSets.length;
+  t.classList.remove("swap-out"); renderEmoji(t, next); restart(t, "sheen");
+  confetti(...centerOf(t), 10);
+  heroBusy = false;
+}
+setInterval(heroNext, 3800);
+
+/* ---- εξαγωγή: PDF (διανυσματικό) ή παρουσίαση (.pptx) ----
+   Κάθε διαφάνεια χτίζεται ως SVG με σταθερά «πλαίσια» (frames): το κείμενο γίνεται καμπύλες (opentype.js)
+   και τα emoji Twemoji μπαίνουν ως διανύσματα. Το PDF φτιάχνεται με svg2pdf (καθαρό σε κάθε μεγέθυνση).
+   Η παρουσίαση παίρνει ακριβώς τις ίδιες διαφάνειες ως PNG διπλής ανάλυσης (2560×1440). */
+const SW = 1280, SH = 720, INK = "#16263a", MUTED = "#5a6b80", SBG = "#e9f0f8", SLINE = "#c8d6e6";
+const LIBS = {
+  jspdf: "https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js",
+  svg2pdf: "https://cdn.jsdelivr.net/npm/svg2pdf.js@2.2.4/dist/svg2pdf.umd.min.js",
+  opentype: "https://cdn.jsdelivr.net/npm/opentype.js@1.3.4/dist/opentype.min.js",
+  pptx: "https://cdn.jsdelivr.net/gh/gitbrent/PptxGenJS@3.12.0/dist/pptxgen.bundle.js"
+};
+const loadScript = src => new Promise((res, rej) => { const e = document.createElement("script"); e.src = src; e.onload = res; e.onerror = () => rej(new Error("script " + src)); document.head.appendChild(e); });
+
+/* γραμματοσειρές (woff από το Fontsource) και emoji (SVG από Twemoji) */
+let FNT = null; const emojiInner = {};
+async function loadFonts() {
+  if (FNT) return;
+  const get = async u => { const r = await fetch(u); if (!r.ok) throw new Error(u); return opentype.parse(await r.arrayBuffer()); };
+  const gl = (sub, w) => get("https://cdn.jsdelivr.net/npm/@fontsource/geologica@5/files/geologica-" + sub + "-" + w + "-normal.woff");
+  const [g4, l4, g6, l6, g8, l8, sy] = await Promise.all([gl("greek", 400), gl("latin", 400), gl("greek", 600), gl("latin", 600), gl("greek", 800), gl("latin", 800),
+    get("https://cdn.jsdelivr.net/npm/@fontsource/lilita-one@5/files/lilita-one-latin-400-normal.woff")]);
+  FNT = { w400: [g4, l4], w600: [g6, l6], w800: [g8, l8], sym: [sy] };
+}
+async function loadEmoji(g) {
+  const k = twFile(g); if (emojiInner[k]) return;
+  const r = await fetch(TW + k + ".svg"); if (!r.ok) throw new Error(k);
+  const d = new DOMParser().parseFromString(await r.text(), "image/svg+xml").documentElement;
+  emojiInner[k] = [...d.childNodes].map(n => new XMLSerializer().serializeToString(n)).join("");
+}
+const fl = w => w >= 800 ? FNT.w800 : w >= 600 ? FNT.w600 : FNT.w400;
+
+/* κείμενο → καμπύλες */
+function lay(fs, str, size) {
+  let x = 0, prev = null; const runs = [];
+  for (const ch of str) {
+    const f = fs.find(ff => ff.charToGlyphIndex(ch) > 0) || fs[fs.length - 1], g = f.charToGlyph(ch), sc = size / f.unitsPerEm;
+    if (prev && prev.f === f) x += f.getKerningValue(prev.g, g) * sc;
+    runs.push({ f, ch, x }); x += g.advanceWidth * sc; prev = { f, g };
+  }
+  return { w: x, runs };
+}
+const tw = (fs, str, size) => lay(fs, str, size).w;
+const pathD = (fs, str, x, yb, size) => lay(fs, str, size).runs.map(r => r.ch === " " ? "" : r.f.getPath(r.ch, x + r.x, yb, size).toPathData(2)).join("");
+function sText(str, x, yc, size, weight, fill, anchor = "middle") {
+  const fs = fl(weight), w = tw(fs, str, size), x0 = anchor === "middle" ? x - w / 2 : anchor === "end" ? x - w : x;
+  return `<path d="${pathD(fs, str, x0, yc + size * .35, size)}" fill="${fill}"/>`;
+}
+function sSym(c, x, yc, sz, col) {
+  const d = pathD(FNT.sym, c, x, yc + sz * .35, sz), st = `fill="${INK}" stroke="${INK}" stroke-width="${(sz * .1).toFixed(2)}" stroke-linejoin="round"`;
+  return `<path d="${d}" transform="translate(0 ${(sz * .07).toFixed(2)})" ${st}/><path d="${d}" ${st}/><path d="${d}" fill="${col}"/>`;
+}
+const rect = (x, y, w, h, r, fill, stroke, sw) => `<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="${r}" fill="${fill}"${stroke ? ` stroke="${stroke}" stroke-width="${sw}"` : ""}/>`;
+const box = (x, y, w, h, r, lw, shadow) => rect(x, y + shadow, w, h, r, INK) + rect(x, y, w, h, r, "#fff", INK, lw);
+function wrapS(fs, str, size, maxW) {
+  const lines = []; let cur = "";
+  str.split(" ").forEach(w => { const t = cur ? cur + " " + w : w; if (tw(fs, t, size) > maxW && cur) { lines.push(cur); cur = w; } else cur = t; });
+  if (cur) lines.push(cur); return lines;
+}
+
+/* πλάκα emoji + emoji = ? μέσα σε σταθερό πλαίσιο */
+function layoutTile(glyphs, end, size, maxW, L) {
+  const sym = size * .9, qs = sym * 1.15, gap = size * .24, sy = FNT.sym, items = [];
+  const unit = parts => ({ parts, w: parts.reduce((a, p) => a + p.w, 0) + gap * (parts.length - 1) });
+  glyphs.forEach((g, i) => {
+    const parts = [{ k: "g", g, w: isEmoji(g) ? size : tw(fl(600), g, size * .8) }];
+    if (i < glyphs.length - 1) parts.push({ k: "s", c: "+", sz: sym, col: "#3b82f6", w: tw(sy, "+", sym) });
+    items.push(unit(parts));
+  });
+  const q = end ? "!" : "?";
+  items.push(unit([{ k: "s", c: "=", sz: sym, col: "#f0b429", w: tw(sy, "=", sym) }, { k: "s", c: q, sz: qs, col: end ? "#22c55e" : L.c, w: tw(sy, q, qs) }]));
+  const rows = [{ items: [], w: 0 }];
+  items.forEach(u => {
+    let r = rows[rows.length - 1];
+    if (r.items.length && r.w + gap + u.w > maxW) { r = { items: [], w: 0 }; rows.push(r); }
+    r.w += (r.items.length ? gap : 0) + u.w; r.items.push(u);
+  });
+  const rowH = size * 1.2;
+  return { rows, gap, rowH, size, h: rows.length * rowH + (rows.length - 1) * gap * .5 };
+}
+function sTile(e, fr, maxSize, L, end) {
+  const glyphs = (e.match(GLYPH) || []).filter(g => g.trim());
+  let t; for (let size = maxSize; size >= 40; size -= 4) { t = layoutTile(glyphs, end, size, fr.w - 140, L); if (t.h <= fr.h - 56) break; }
+  let out = box(fr.x, fr.y, fr.w, fr.h, 30, 4, 12);
+  const top = fr.y + (fr.h - t.h) / 2;
+  t.rows.forEach((r, ri) => {
+    let x = fr.x + (fr.w - r.w) / 2; const yc = top + ri * (t.rowH + t.gap * .5) + t.rowH / 2;
+    r.items.forEach((u, ui) => {
+      if (ui) x += t.gap;
+      u.parts.forEach((p, pi) => {
+        if (pi) x += t.gap;
+        if (p.k === "s") out += sSym(p.c, x, yc, p.sz, p.col);
+        else if (isEmoji(p.g)) out += `<g transform="translate(${x.toFixed(2)} ${(yc - t.size / 2).toFixed(2)}) scale(${(t.size / 36).toFixed(4)})">${emojiInner[twFile(p.g)]}</g>`;
+        else out += sText(p.g, x, yc, t.size * .8, 600, INK, "start");
+        x += p.w;
+      });
+    });
+  });
+  return out;
+}
+
+/* διαφάνειες: όλα σε σταθερά πλαίσια */
+const levelOfIdx = k => k < 5 ? LEVELS[0] : k < 15 ? LEVELS[1] : LEVELS[2];
+function chrome(s) {
+  let o = rect(0, 0, SW, 16, 0, s.L.c);
+  o += sText(s.L.name, 64, 70, 36, 800, s.L.t, "start") + sText(s.i + " / " + s.L.n, SW - 64, 70, 30, 600, MUTED, "end");
+  const n = 20, g = 6, lg = 14, segW = (SW - 128 - (n - 1) * g - 2 * lg) / n; let x = 64;
+  for (let k = 0; k < n; k++) { if (k === 5 || k === 15) x += lg; o += rect(x.toFixed(2), 654, segW.toFixed(2), 12, 6, k < s.qn ? levelOfIdx(k).s : SLINE); x += segW + g; }
+  return o;
+}
+function slideSvg(s) {
+  const bg = s.kind === "level" ? s.L.c : s.kind === "divider" ? "#f0b429" : SBG; let o = "";
+  if (s.kind === "title") {
+    o += sText("Emoji Παροιμίες", SW / 2, 130, 88, 800, INK) + sText("Βρες την παροιμία που κρύβεται πίσω από τα emoji", SW / 2, 205, 32, 400, MUTED);
+    o += sTile("🐦1️⃣🚫🌸", { x: 80, y: 262, w: 1120, h: 236 }, 110, { c: "#ef4444" }, false);
+    LEVELS.forEach((L, i) => {
+      const w = 300, h = 104, x = (SW - (3 * w + 60)) / 2 + i * (w + 30), y = 548;
+      o += rect(x, y, w, h, 18, "#fff", SLINE, 2) + sText(L.name, x + w / 2, y + 36, 30, 800, L.t) + sText(L.n + " ερωτήσεις", x + w / 2, y + 74, 24, 400, MUTED);
+    });
+  } else if (s.kind === "level" || s.kind === "divider") {
+    const lv = s.kind === "level", x = 210, y = 200;
+    o += box(x, y, 860, 320, 36, 5, 14) + sText(lv ? "Επίπεδο" : "Τέλος ερωτήσεων", SW / 2, y + 62, 30, 600, MUTED);
+    o += sText(lv ? s.L.name : "Απαντήσεις", SW / 2, y + 165, lv ? 128 : 110, 800, lv ? s.L.t : INK);
+    o += sText(lv ? s.L.n + " ερωτήσεις" : "Οι σωστές απαντήσεις μία-μία", SW / 2, y + 264, 38, 600, MUTED);
+  } else if (s.kind === "q") {
+    o += chrome(s) + sText("Ποια παροιμία κρύβεται;", SW / 2, 144, 44, 800, INK);
+    o += sTile(s.x.p.e, { x: 80, y: 208, w: 1120, h: 360 }, 170, s.L, false);
+  } else {
+    o += chrome(s) + sText("Απάντηση", SW / 2, 144, 40, 800, "#178a48");
+    o += sTile(s.x.p.e, { x: 80, y: 196, w: 1120, h: 160 }, 70, s.L, true);
+    const fr = { x: 80, y: 384, w: 1120, h: 216 }, avail = fr.h - 56, tx = s.x.p.t, al = s.x.p.alt;
+    let pick = null;
+    for (const ps of [44, 40, 36, 32]) { for (const ms of [28, 26, 24, 22]) {
+      const pl = wrapS(fl(800), tx, ps, 1000), ml = wrapS(fl(400), al, ms, 1000);
+      if (pl.length * ps * 1.25 + 12 + ml.length * ms * 1.35 <= avail) { pick = { ps, ms, pl, ml }; break; }
+    } if (pick) break; }
+    if (!pick) pick = { ps: 32, ms: 22, pl: wrapS(fl(800), tx, 32, 1000), ml: wrapS(fl(400), al, 22, 1000) };
+    const lp = pick.ps * 1.25, lm = pick.ms * 1.35, bh = pick.pl.length * lp + 12 + pick.ml.length * lm, y0 = fr.y + (fr.h - bh) / 2;
+    o += box(fr.x, fr.y, fr.w, fr.h, 26, 4, 10);
+    pick.pl.forEach((l, i) => { o += sText(l, SW / 2, y0 + i * lp + lp / 2, pick.ps, 800, INK); });
+    pick.ml.forEach((l, i) => { o += sText(l, SW / 2, y0 + pick.pl.length * lp + 12 + i * lm + lm / 2, pick.ms, 400, MUTED); });
+  }
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="${SW}" height="${SH}" viewBox="0 0 ${SW} ${SH}"><rect width="${SW}" height="${SH}" fill="${bg}"/>${o}</svg>`;
+}
+const svgToPng = (svg, scale) => new Promise((res, rej) => {
+  const url = URL.createObjectURL(new Blob([svg], { type: "image/svg+xml" })), img = new Image();
+  img.onload = () => { const c = document.createElement("canvas"); c.width = SW * scale; c.height = SH * scale; c.getContext("2d").drawImage(img, 0, 0, c.width, c.height); URL.revokeObjectURL(url); res(c.toDataURL("image/png")); };
+  img.onerror = () => { URL.revokeObjectURL(url); rej(new Error("svg")); };
+  img.src = url;
+});
+function saveBlob(blob, name) { const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = name; document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 1500); }
+
+async function exportGame(format, answersAtEnd, onProg) {
+  onProg("Φόρτωση βιβλιοθηκών…", 3);
+  if (!window.opentype) await loadScript(LIBS.opentype);
+  if (format === "pdf") { if (!window.jspdf) await loadScript(LIBS.jspdf); if (!window.svg2pdf) await loadScript(LIBS.svg2pdf); }
+  else if (!window.PptxGenJS) await loadScript(LIBS.pptx);
+  onProg("Φόρτωση γραμματοσειρών και emoji…", 10);
+  await loadFonts();
+  const game = buildPool().map((x, n) => ({ ...x, qn: n + 1 }));
+  game.forEach(x => { x.i = game.filter(y => y.L === x.L && y.qn <= x.qn).length; });
+  const slides = [{ kind: "title" }];
+  LEVELS.forEach(L => {
+    slides.push({ kind: "level", L });
+    game.filter(x => x.L === L).forEach(x => { slides.push({ kind: "q", x, L, i: x.i, qn: x.qn }); if (!answersAtEnd) slides.push({ kind: "a", x, L, i: x.i, qn: x.qn }); });
+  });
+  if (answersAtEnd) { slides.push({ kind: "divider" }); game.forEach(x => slides.push({ kind: "a", x, L: x.L, i: x.i, qn: x.qn })); }
+  const all = new Set((["🐦1️⃣🚫🌸"].concat(game.map(x => x.p.e)).join("").match(GLYPH) || []).filter(isEmoji));
+  await Promise.all([...all].map(loadEmoji));
+  const total = slides.length, name = "emoji-paroimies." + format;
+  if (format === "pdf") {
+    const doc = new window.jspdf.jsPDF({ orientation: "landscape", unit: "px", format: [SW, SH], compress: true, hotfixes: ["px_scaling"] });
+    const holder = document.createElement("div"); holder.style.cssText = "position:fixed;left:-10000px;top:0;width:1280px;height:720px;pointer-events:none"; document.body.appendChild(holder);
+    const o = { x: 0, y: 0, width: SW, height: SH};
+    try {
+      for (let i = 0; i < total; i++) {
+        holder.innerHTML = slideSvg(slides[i]); const el = holder.firstElementChild;
+        if (i) doc.addPage([SW, SH], "landscape");
+        if (typeof doc.svg === "function") await doc.svg(el, o); else await (window.svg2pdf.svg2pdf || window.svg2pdf)(el, doc, o);
+        onProg("Διαφάνεια " + (i + 1) + " από " + total + "…", 15 + 80 * (i + 1) / total); await wait(0);
+      }
+    } finally { holder.remove(); }
+    onProg("Αποθήκευση αρχείου…", 97); doc.save(name);
+  } else {
+    const pptx = new window.PptxGenJS(); pptx.layout = "LAYOUT_16x9"; pptx.title = "Emoji Παροιμίες";
+    for (let i = 0; i < total; i++) {
+      const sl = pptx.addSlide(), s = slides[i];
+      sl.addImage({ data: await svgToPng(slideSvg(s), 2), x: 0, y: 0, w: 10, h: 5.625 });
+      if (s.kind === "q") sl.addNotes("Απάντηση: " + s.x.p.t + " (" + s.x.p.alt + ")");
+      onProg("Διαφάνεια " + (i + 1) + " από " + total + "…", 15 + 80 * (i + 1) / total); await wait(0);
+    }
+    onProg("Αποθήκευση αρχείου…", 97);
+    const out = await pptx.write({ outputType: "blob" });
+    saveBlob(out instanceof Blob ? out : new Blob([out], { type: "application/vnd.openxmlformats-officedocument.presentationml.presentation" }), name);
+  }
+  onProg("Έτοιμο! Το αρχείο αποθηκεύτηκε.", 100);
+}
+const modal = $("exportModal"); let exporting = false, answersAtEnd = false;
+$("goExport").onclick = () => { modal.hidden = false; $("mProg").hidden = true; $("mFill").style.width = "0"; $("exPdf").focus(); };
+const closeModal = () => { if (!exporting) modal.hidden = true; };
+$("mClose").onclick = closeModal;
+modal.addEventListener("click", e => { if (e.target === modal) closeModal(); });
+addEventListener("keydown", e => { if (e.key === "Escape" && !modal.hidden) closeModal(); });
+document.querySelectorAll("#ansSeg button").forEach(b => b.onclick = () => {
+  answersAtEnd = b.dataset.v === "end";
+  document.querySelectorAll("#ansSeg button").forEach(x => x.setAttribute("aria-pressed", x === b));
+});
+async function runExport(fmt) {
+  if (exporting) return;
+  exporting = true; ["exPdf", "exPptx", "mClose"].forEach(i => $(i).disabled = true); $("mProg").hidden = false;
+  const prog = (t, p) => { $("mText").textContent = t; $("mFill").style.width = p + "%"; };
+  try { await exportGame(fmt, answersAtEnd, prog); confetti(...centerOf($("mCard")), 40); }
+  catch (e) { console.error(e); prog("Η δημιουργία απέτυχε. Έλεγξε τη σύνδεση και δοκίμασε ξανά.", 0); }
+  finally { exporting = false; ["exPdf", "exPptx", "mClose"].forEach(i => $(i).disabled = false); }
+}
+$("exPdf").onclick = () => runExport("pdf"); $("exPptx").onclick = () => runExport("pptx");
+
+/* ---- βαθμονόμηση ---- */
+const TESTS = [
+  ["Ένα χελιδόνι δεν φέρνει την άνοιξη", "Μια χελιδόνα δεν φέρνει την άνοιξη", true, "παραφράση"],
+  ["Ένα χελιδόνι δεν φέρνει την άνοιξη", "Ένα μόνο σημάδι δεν αρκεί για συμπέρασμα", true, "άλλη διατύπωση"],
+  ["Ένα χελιδόνι δεν φέρνει την άνοιξη", "Ένα χελιδόνι φέρνει την άνοιξη", false, "άρνηση"],
+  ["Όποιος ψάχνει βρίσκει", "Όποιος προσπαθεί τελικά τα καταφέρνει", true, "παραφράση"],
+  ["Όποιος ψάχνει βρίσκει", "Όποιος ψάχνει δεν βρίσκει", false, "αντίφαση"],
+  ["Όποιος ψάχνει βρίσκει", "Αν ψάξεις θα βρεις", true, "συνθήκη"],
+  ["Όποιος ψάχνει βρίσκει", "Αν δεν ψάξεις θα βρεις", false, "συνθήκη + άρνηση"],
+  ["Δύο καρπούζια σε μια μασχάλη δεν χωράνε", "Τρία καρπούζια σε μια μασχάλη δεν χωράνε", false, "αριθμοί"],
+  ["Κάλλιο αργά παρά ποτέ", "Καλύτερα αργά παρά καθόλου", true, "άλλη διατύπωση"],
+  ["Κάλλιο αργά παρά ποτέ", "Σήμερα έχει πολλή ζέστη στην Αθήνα", false, "τυχαία πρόταση"],
+  ["Όποιος ψάχνει βρίσκει", "Σήμερα πήγα στο σούπερ μάρκετ να αγοράσω γάλα", false, "τυχαία πρόταση"],
+  ["Όποιος βιάζεται σκοντάφτει", "Μου αρέσει να βλέπω ταινίες το βράδυ", false, "τυχαία πρόταση"],
+  ["Η Ρώμη δεν χτίστηκε σε μια μέρα", "Τα μεγάλα έργα θέλουν χρόνο", true, "νόημα"],
+  ["Όποιος βιάζεται σκοντάφτει", "Όποιος βιάζεται τα καταφέρνει καλύτερα", false, "αντίφαση"],
+];
+$("goTest").onclick = () => { $("thr").value = CONFIG.threshold; $("mar").value = CONFIG.margin; show("test"); };
+$("testBack").onclick = () => show("home");
+let testRows = [];
+function paintTests() {
+  const t = $("tests"); t.innerHTML = "<tr><th>Αναφορά</th><th>Απάντηση</th><th>Τύπος</th><th>Σκορ</th><th>Άλλη</th><th>Αναμ.</th><th>Αποτ.</th></tr>";
+  testRows.forEach(r => {
+    const got = Similarity.decide(r);
+    const tr = document.createElement("tr");
+    [r.ref, r.user, r.kind, r.score.toFixed(2) + (r.guards ? "" : " ⛔"), r.rival.toFixed(2), r.exp ? "ναι" : "όχι", got === r.exp ? "✔" : "✘"].forEach((v, i) => {
+      const td = document.createElement("td"); td.textContent = v;
+      if (i === 6) td.className = got === r.exp ? "ok" : "no";
+      tr.appendChild(td);
+    });
+    t.appendChild(tr);
+  });
+}
+const bindNum = (id, key) => $(id).oninput = e => { const v = parseFloat(e.target.value); if (!isNaN(v)) { CONFIG[key] = v; if (testRows.length) paintTests(); } };
+bindNum("thr", "threshold"); bindNum("mar", "margin");
+$("runTests").onclick = async () => {
+  $("runTests").disabled = true; $("runTests").textContent = "Εκτέλεση…";
+  try {
+    testRows = [];
+    for (const [ref, user, exp, kind] of TESTS) {
+      const p = PROVERBS.find(x => x.t === ref);
+      testRows.push({ ref, user, exp, kind, ...(await Similarity.debug(p ? [p.t, p.alt] : [ref], user, p ? rivalsFor(p) : [])) });
+    }
+    setStatus("ready"); paintTests();
+  } catch (e) { console.error(e); setStatus("error"); alert("Το μοντέλο δεν φορτώθηκε. Έλεγξε τη σύνδεση."); }
+  $("runTests").disabled = false; $("runTests").textContent = "Εκτέλεση δοκιμών";
+};
+
+
+/* ---- εκκίνηση: κατέβασμα του μοντέλου στο παρασκήνιο ---- */
+setStatus("idle");
+loadModel();
+</script>
+</body>
+</html>
