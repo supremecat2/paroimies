@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Emoji Παροιμίες</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧩</text></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Geologica:wght@100..900&family=Lilita+One&display=swap" rel="stylesheet">
@@ -317,6 +318,13 @@ h2+.center{margin-top:8px}
     <div class="mprog" id="mProg" hidden><div class="mbar"><i id="mFill"></i></div><small id="mText" class="muted"></small></div>
   </div>
 </div>
+<div class="modal" id="quitModal" hidden>
+  <div class="mcard" role="dialog" aria-modal="true" aria-labelledby="qTitle">
+    <h2 id="qTitle">Να βγεις από το παιχνίδι;</h2>
+    <p class="muted" id="qText"></p>
+    <div class="mactions"><button class="primary" id="qStay">Συνέχισε</button><button class="ghost" id="qLeave">Έξοδος</button></div>
+  </div>
+</div>
 <div class="toast" id="toast" role="status" aria-live="polite">
   <span class="spin"></span>
   <div class="tx"><b id="sText"></b><small id="sSub"></small><div class="bar"><i id="sFill"></i></div></div>
@@ -591,13 +599,60 @@ TIMES.forEach((o, i) => {
 });
 
 /* ---- παιχνίδι: 5 εύκολες, 10 μεσαίες, 5 δύσκολες ---- */
-let results = [], timerSecs = 0, pool = [], idx = 0, total = 0, shown = 0, hintsUsed = 0, timeLeft = 0, tick = null, locked = true, checking = false, run = 0, stats = {};
+let phase = "q", lastRes = null, active = false, results = [], timerSecs = 0, pool = [], idx = 0, total = 0, shown = 0, hintsUsed = 0, timeLeft = 0, tick = null, locked = true, checking = false, run = 0, stats = {};
 const buildPool = () => LEVELS.flatMap(L => shuffle(PROVERBS.filter(p => p.lv === L.lv)).slice(0, L.n).map(p => ({ p, L })));
+
+/* ---- αποθήκευση προόδου (localStorage): το παιχνίδι συνεχίζεται μετά από ανανέωση ---- */
+const SAVE_KEY = "paroimies.save.v1";
+function saveGame() {
+  if (!active || !pool.length) return;
+  try { localStorage.setItem(SAVE_KEY, JSON.stringify({ v: 1, timerSecs, pool: pool.map(x => x.p.t), idx, results, total, stats, phase, hintsUsed, timeLeft, answer: phase === "q" ? $("answer").value : "", res: lastRes })); } catch (e) {}
+}
+function clearSave() { try { localStorage.removeItem(SAVE_KEY); } catch (e) {} }
+let saveT; const saveSoon = () => { clearTimeout(saveT); saveT = setTimeout(saveGame, 400); };
+function renderReveal(p, L, won, timeout, gained) {
+  const r = $("reveal"); r.className = "reveal " + (won ? "won" : "gave"); r.innerHTML = "";
+  r.append(document.createTextNode(p.t));
+  const s = document.createElement("small");
+  s.textContent = won ? "Μπράβο! +" + gained + " βαθμοί" : timeout ? "Τέλος χρόνου" : "Η σωστή απάντηση";
+  r.appendChild(s);
+  $("next").textContent = idx + 1 >= pool.length ? "Δες το αποτέλεσμα" : (pool[idx + 1].L !== L ? "Επόμενο επίπεδο" : "Επόμενη παροιμία");
+}
+function restoreGame() {
+  let d = null; try { d = JSON.parse(localStorage.getItem(SAVE_KEY) || "null"); } catch (e) {}
+  if (!d || d.v !== 1 || !Array.isArray(d.pool) || !(d.idx >= 0) || d.idx >= d.pool.length) return false;
+  const items = d.pool.map(t => { const p = PROVERBS.find(x => x.t === t); return p && { p, L: LEVELS.find(l => l.lv === p.lv) }; });
+  if (items.some(x => !x)) { clearSave(); return false; }
+  ++run; pool = items; idx = d.idx; results = (d.results || []).map(r => r === null ? undefined : r);
+  total = shown = d.total || 0; stats = d.stats || { 1: 0, 2: 0, 3: 0 }; timerSecs = d.timerSecs || 0;
+  phase = d.phase === "a" ? "a" : "q"; lastRes = d.res || null; hintsUsed = d.hintsUsed || 0; active = true;
+  pool.forEach(x => preload(x.p.e));
+  show("game"); $("steps").innerHTML = ""; renderSteps(); $("score").textContent = total + " β.";
+  const { p, L } = pool[idx];
+  document.body.style.setProperty("--lv", L.c); document.body.style.setProperty("--lvt", L.t);
+  $("lvName").textContent = L.name; $("lvName").className = L.cls;
+  $("qn").textContent = (pool.slice(0, idx).filter(x => x.L === L).length + 1) + " / " + L.n;
+  renderEmoji($("tile"), p.e); $("tile").classList.remove("win", "lose");
+  renderHints();
+  const a = $("answer"); a.classList.remove("wrong"); $("msg").className = "msg"; $("msg").textContent = "";
+  if (phase === "a" && lastRes) {
+    locked = true; a.value = ""; a.disabled = true; $("play").hidden = true; $("after").hidden = false; $("timer").hidden = true; $("hint").disabled = true;
+    $("tile").classList.add(lastRes.won ? "win" : "lose");
+    renderReveal(p, L, lastRes.won, lastRes.timeout, lastRes.gained);
+  } else {
+    phase = "q"; locked = false; a.value = d.answer || ""; a.disabled = false; $("check").disabled = false; $("check").textContent = "Έλεγχος";
+    $("after").hidden = true; $("play").hidden = false; $("msg").textContent = "Συνεχίζεις από εκεί που σταμάτησες.";
+    if (timerSecs && (d.timeLeft ?? 1) <= 0) endQuestion(false, true); else startTimer(d.timeLeft);
+  }
+  loadModel();
+  return true;
+}
 
 function startGame() {
   const my = ++run;
   pool = buildPool(); results = []; idx = 0; total = 0; shown = 0; stats = { 1: 0, 2: 0, 3: 0 };
   $("score").textContent = "0 β."; $("steps").innerHTML = "";
+  active = true; phase = "q"; lastRes = null; hintsUsed = 0; timeLeft = timerSecs; $("answer").value = ""; saveGame();
   pool.forEach(x => preload(x.p.e)); show("game"); loadModel(); nextQuestion(my);
 }
 function renderSteps() {
@@ -617,29 +672,29 @@ async function nextQuestion(my) {
   $("lvName").textContent = L.name; $("lvName").className = L.cls;
   $("qn").textContent = (pool.slice(0, idx).filter(x => x.L === L).length + 1) + " / " + L.n;
   renderEmoji($("tile"), p.e); restart($("tile"), "flip");
-  hintsUsed = 0; locked = false;
+  phase = "q"; lastRes = null; hintsUsed = 0; locked = false;
   $("hintbox").innerHTML = "";
   const a = $("answer"); a.value = ""; a.disabled = false; a.classList.remove("wrong");
   $("msg").textContent = ""; $("msg").className = "msg";
   $("play").hidden = false; restart($("play"), "enter");
   $("hint").disabled = false; $("hint").textContent = "Υπόδειξη (3)"; $("check").disabled = false; $("check").textContent = "Έλεγχος";
-  startTimer();
+  startTimer(); saveGame();
   if (!calm) setTimeout(() => a.focus({ preventScroll: true }), 400);
 }
 
-function startTimer() {
+function startTimer(left) {
   clearInterval(tick);
   $("timer").hidden = !timerSecs;
   if (!timerSecs) return;
-  timeLeft = timerSecs;
+  timeLeft = left ?? timerSecs;
   const fill = $("timerFill");
   $("timer").classList.remove("low");
-  fill.style.transition = "none"; fill.style.width = "100%";
+  fill.style.transition = "none"; fill.style.width = (timeLeft / timerSecs * 100) + "%"; $("timer").classList.toggle("low", timeLeft <= 10);
   requestAnimationFrame(() => requestAnimationFrame(() => { fill.style.transition = ""; }));
   tick = setInterval(() => {
     timeLeft--;
     fill.style.width = Math.max(0, timeLeft / timerSecs * 100) + "%";
-    $("timer").classList.toggle("low", timeLeft <= 10);
+    $("timer").classList.toggle("low", timeLeft <= 10); saveGame();
     if (timeLeft <= 0) { clearInterval(tick); endQuestion(false, true); }
   }, 1000);
 }
@@ -649,15 +704,14 @@ function hintTexts(t) {
   const mask = x => x[0] + "_".repeat(Math.max(0, x.length - 1));
   return ["Η παροιμία έχει " + w.length + " λέξεις.", w.map(mask).join(" "), w.map((x, i) => i < 2 ? x : mask(x)).join(" ")];
 }
-$("hint").onclick = () => {
-  if (locked || hintsUsed >= 3) return;
-  const hs = hintTexts(pool[idx].p.t);
-  hintsUsed++;
-  const box = $("hintbox"); box.hidden = false; box.innerHTML = "";
+function renderHints() {
+  const hs = hintTexts(pool[idx].p.t), box = $("hintbox");
+  box.hidden = hintsUsed === 0; box.innerHTML = "";
   for (let i = 0; i < hintsUsed; i++) { const d = document.createElement("div"); d.textContent = hs[i]; if (i) d.className = "mono"; box.appendChild(d); }
   $("hint").textContent = hintsUsed >= 3 ? "Καμία άλλη υπόδειξη" : "Υπόδειξη (" + (3 - hintsUsed) + ")";
-  if (hintsUsed >= 3) $("hint").disabled = true;
-};
+  $("hint").disabled = hintsUsed >= 3;
+}
+$("hint").onclick = () => { if (locked || hintsUsed >= 3) return; hintsUsed++; renderHints(); saveGame(); };
 
 async function submit() {
   if (locked || checking) return;
@@ -680,6 +734,7 @@ async function submit() {
   } finally { checking = false; if (!locked) { $("check").disabled = false; $("check").textContent = "Έλεγχος"; } }
 }
 $("check").onclick = submit;
+$("answer").addEventListener("input", saveSoon);
 $("answer").addEventListener("keydown", e => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); submit(); } });
 $("giveup").onclick = () => { if (!locked) endQuestion(false); };
 
@@ -693,18 +748,13 @@ function endQuestion(won, timeout) {
   $("answer").disabled = true; $("play").hidden = true; $("after").hidden = false;
   if (won) { restart(tile, "win"); confetti(...centerOf(tile)); floatText("+" + gained, tile); }
   else restart(tile, "lose");
-  const r = $("reveal"); r.className = "reveal " + (won ? "won" : "gave"); r.innerHTML = "";
-  r.append(document.createTextNode(p.t));
-  const s = document.createElement("small");
-  s.textContent = won ? "Μπράβο! +" + gained + " βαθμοί" : timeout ? "Τέλος χρόνου" : "Η σωστή απάντηση";
-  r.appendChild(s);
-  $("next").textContent = idx + 1 >= pool.length ? "Δες το αποτέλεσμα" : (pool[idx + 1].L !== L ? "Επόμενο επίπεδο" : "Επόμενη παροιμία");
+  renderReveal(p, L, won, timeout, gained); phase = "a"; lastRes = { won, timeout, gained }; saveGame();
   $("next").focus({ preventScroll: true });
 }
-$("next").onclick = () => { idx++; renderSteps(); nextQuestion(run); };
+$("next").onclick = () => { idx++; phase = "q"; lastRes = null; hintsUsed = 0; timeLeft = timerSecs; $("answer").value = ""; saveGame(); renderSteps(); nextQuestion(run); };
 
 function finish() {
-  clearInterval(tick); show("end");
+  clearInterval(tick); active = false; clearSave(); show("end");
   countUp($("endScore"), 0, total, " β.", 1200);
   const right = stats[1] + stats[2] + stats[3];
   $("endInfo").textContent = "Βρήκες " + right + " από " + pool.length + " παροιμίες.";
@@ -718,7 +768,20 @@ function finish() {
 }
 $("again").onclick = () => show("setup");
 $("toHome").onclick = () => show("home");
-$("quit").onclick = () => { run++; clearInterval(tick); $("banner").classList.remove("show"); show("home"); };
+/* προειδοποίηση εξόδου: εμφανίζεται μόνο αν έχεις ήδη απαντήσει (ή παραλείψει) τουλάχιστον 4 ερωτήσεις */
+let resumeTimer = false;
+function leaveGame() { run++; active = false; clearInterval(tick); clearSave(); $("quitModal").hidden = true; $("banner").classList.remove("show"); show("home"); }
+function stayGame() { $("quitModal").hidden = true; if (resumeTimer) { resumeTimer = false; startTimer(timeLeft); } }
+$("quit").onclick = () => {
+  const done = results.filter(r => r !== undefined).length;
+  if (done < 4) return leaveGame();
+  resumeTimer = !locked && timerSecs > 0 && !$("play").hidden; clearInterval(tick);
+  $("qText").textContent = "Έχεις ήδη απαντήσει " + done + " από " + pool.length + " ερωτήσεις και έχεις " + total + " βαθμούς. Αν βγεις, η πρόοδός σου θα χαθεί.";
+  $("quitModal").hidden = false; $("qStay").focus();
+};
+$("qStay").onclick = stayGame; $("qLeave").onclick = leaveGame;
+$("quitModal").addEventListener("click", e => { if (e.target === $("quitModal")) stayGame(); });
+addEventListener("keydown", e => { if (e.key === "Escape" && !$("quitModal").hidden) stayGame(); });
 
 /* ---- κινούμενη πλάκα στην αρχική: αλλάζει παροιμίες για να φαίνεται το περιεχόμενο ---- */
 const heroSets = ["🐦1️⃣🚫🌸", ...shuffle(PROVERBS.map(p => p.e).filter(e => e !== "🐦1️⃣🚫🌸"))];
@@ -1004,6 +1067,7 @@ $("runTests").onclick = async () => {
 
 /* ---- εκκίνηση: κατέβασμα του μοντέλου στο παρασκήνιο ---- */
 setStatus("idle");
+restoreGame();
 loadModel();
 </script>
 </body>
