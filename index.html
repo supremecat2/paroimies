@@ -225,6 +225,36 @@ h2+.center{margin-top:8px}
   .toast{width:460px}.mcard{width:520px}
   .foot button{font-size:15px;min-height:40px;padding:0 8px}
 }
+/* προσωπικά ρεκόρ */
+.mcard.rec{max-height:92vh;overflow:auto}
+.rdata{margin-top:10px;padding-top:12px;border-top:1px solid var(--line);font-size:12px;color:var(--muted)}
+.rdata summary{cursor:pointer;display:inline-block;padding:4px 0;list-style:none;opacity:.75}
+.rdata summary::-webkit-details-marker{display:none}
+.rdata summary:hover{opacity:1}
+.rlink{display:block;margin-top:8px;padding:6px 0;background:none;border:0;box-shadow:none;border-radius:0;min-height:0;width:auto;font:inherit;font-size:12px;color:var(--muted);text-decoration:underline;cursor:pointer}
+.rlink:hover:not(:disabled){color:#d62f2f;transform:none;box-shadow:none}
+.rlink.armed{color:#d62f2f;font-weight:600}
+.rlink:disabled{opacity:.5;cursor:default}
+#rBody{display:flex;flex-direction:column;gap:16px}
+.mfilter{display:flex;flex-wrap:wrap;gap:8px}
+.mfilter button{min-height:38px;padding:4px 12px;font-size:14px;background:transparent;box-shadow:inset 0 0 0 2px var(--line);color:var(--muted)}
+.mfilter button[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink);box-shadow:none}
+.rstats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.rstats .card b{font-size:26px}
+.rtrend{font-weight:600}
+.rtrend.up{color:var(--good-t)} .rtrend.down{color:var(--hard-t)}
+.rsub{font-weight:600;font-size:14px;color:var(--muted);margin:0 0 -8px}
+.rchart{width:100%;height:auto;display:block}
+.rlv{display:grid;gap:8px}
+.lvrow{display:grid;grid-template-columns:76px 1fr 44px;align-items:center;gap:10px;font-size:14px}
+.lvrow span{font-weight:600}
+.lvrow .bar{height:10px;border-radius:5px;background:var(--line);overflow:hidden}
+.lvrow .bar i{display:block;height:100%}
+.lvrow b{text-align:right}
+.rlist{display:grid;gap:6px;font-size:14px}
+.rlist div{display:grid;grid-template-columns:1fr auto auto;gap:14px}
+.rlist span:first-child{color:var(--muted)}
+.rec-new{color:var(--accent-dark);font-weight:800}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
 </style>
 </head>
@@ -243,7 +273,7 @@ h2+.center{margin-top:8px}
     <div class="card" style="--i:2"><span class="hard">Δύσκολο</span><b>5</b><small>ερωτήσεις</small></div>
   </div>
   <button class="primary start" id="start">Ξεκίνα</button>
-  <div class="foot"><button id="goExport">Εξαγωγή για εκδήλωση</button><button id="goTest">Δοκιμές βαθμονόμησης</button></div>
+  <div class="foot"><button id="goRecords">Τα ρεκόρ μου</button><button id="goExport">Εξαγωγή για εκδήλωση</button><button id="goTest" hidden>Δοκιμές βαθμονόμησης</button></div>
 </section>
 
 <section id="setup" hidden>
@@ -264,7 +294,7 @@ h2+.center{margin-top:8px}
   <div class="tile" id="tile" aria-label="Emoji της παροιμίας"></div>
   <div class="hintbox" id="hintbox" hidden></div>
   <div id="play" hidden>
-    <textarea id="answer" rows="2" placeholder="Γράψε την παροιμία ή το νόημά της…" autocomplete="off" autocapitalize="sentences"></textarea>
+    <textarea id="answer" rows="2" placeholder="Γράψε την παροιμία ή το νόημά της…" autocomplete="off" autocapitalize="sentences" maxlength="300"></textarea>
     <div class="msg" id="msg" aria-live="polite"></div>
     <div class="actions">
       <button class="primary" id="check">Έλεγχος</button>
@@ -282,6 +312,7 @@ h2+.center{margin-top:8px}
   <header class="head"><h1>Τέλος παιχνιδιού</h1></header>
   <div class="score" id="endScore">0 β.</div>
   <p class="center" id="endInfo"></p>
+  <p class="center" id="endRecord"></p>
   <div class="path" id="endPath"></div>
   <div class="row">
     <button class="primary" id="again">Παίξε ξανά</button>
@@ -311,7 +342,7 @@ h2+.center{margin-top:8px}
   <div class="mcard" id="mCard" role="dialog" aria-modal="true" aria-labelledby="mTitle">
     <button class="ghost mclose" id="mClose" aria-label="Κλείσιμο"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
     <h2 id="mTitle">Εξαγωγή παιχνιδιού</h2>
-    <p class="muted">Φτιάχνει ένα νέο παιχνίδι με 20 ερωτήσεις (5 εύκολες, 10 μεσαίες, 5 δύσκολες) για προβολή σε τάξη ή εκδήλωση, χωρίς να χρειάζονται κινητά. Το PDF είναι διανυσματικό, δηλαδή καθαρό σε κάθε μεγέθυνση.</p>
+    <p class="muted">Φτιάχνει ένα νέο παιχνίδι με 20 ερωτήσεις (5 εύκολες, 10 μεσαίες, 5 δύσκολες) για προβολή σε τάξη ή εκδήλωση, χωρίς να χρειάζονται κινητά. Το PDF και η παρουσίαση είναι διανυσματικά, δηλαδή καθαρά σε κάθε μεγέθυνση.</p>
     <div class="mlabel">Πότε εμφανίζονται οι απαντήσεις</div>
     <div class="mseg" id="ansSeg"><button data-v="after" aria-pressed="true">Μετά από κάθε ερώτηση</button><button data-v="end" aria-pressed="false">Όλες στο τέλος</button></div>
     <div class="mactions"><button class="primary" id="exPdf">PDF</button><button class="ghost" id="exPptx">Παρουσίαση (.pptx)</button></div>
@@ -325,6 +356,23 @@ h2+.center{margin-top:8px}
     <div class="mactions"><button class="primary" id="qStay">Συνέχισε</button><button class="ghost" id="qLeave">Έξοδος</button></div>
   </div>
 </div>
+<div class="modal" id="giveModal" hidden>
+  <div class="mcard" role="dialog" aria-modal="true" aria-labelledby="gTitle">
+    <button class="ghost mclose" id="gClose" aria-label="Κλείσιμο"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+    <h2 id="gTitle">Να τελειώσει το παιχνίδι;</h2>
+    <p class="muted" id="gText"></p>
+    <div class="mactions"><button class="primary" id="gEnd">Τέλος παιχνιδιού</button><button class="ghost" id="gSkip">Παράτα μόνο την ερώτηση</button></div>
+  </div>
+</div>
+<div class="modal" id="recModal" hidden>
+  <div class="mcard rec" role="dialog" aria-modal="true" aria-labelledby="rTitle">
+    <button class="ghost mclose" id="rClose" aria-label="Κλείσιμο"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+    <h2 id="rTitle">Τα ρεκόρ μου</h2>
+    <div class="mfilter" id="rFilter" role="group" aria-label="Φίλτρο χρόνου"></div>
+    <div id="rBody"></div>
+    <details class="rdata" id="rData" hidden><summary>Διαχείριση δεδομένων</summary><button type="button" class="rlink" id="rReset">Διαγραφή όλων των ρεκόρ…</button></details>
+  </div>
+</div>
 <div class="toast" id="toast" role="status" aria-live="polite">
   <span class="spin"></span>
   <div class="tx"><b id="sText"></b><small id="sSub"></small><div class="bar"><i id="sFill"></i></div></div>
@@ -332,6 +380,18 @@ h2+.center{margin-top:8px}
 </div>
 
 <script type="module">
+/* =====================================================================
+ *  DEV_MODE: διακόπτης ανάπτυξης για το εργαλείο βαθμονόμησης.
+ *    false (δημόσιο παιχνίδι): το κουμπί και η σελίδα βαθμονόμησης αφαιρούνται από τη σελίδα,
+ *                              ο κώδικάς τους δεν εκτελείται και οι ρυθμίσεις ελέγχου παγώνουν (Object.freeze).
+ *    true  (ανάπτυξη/δοκιμές): εμφανίζεται το κουμπί «Δοκιμές βαθμονόμησης» και δουλεύει όπως πάντα.
+ *  ΠΡΟΣΟΧΗ: δεν είναι μέτρο ασφαλείας. Όποιος έχει το HTML μπορεί να το αλλάξει στο δικό του αντίγραφο
+ *  ή να χειριστεί τη JavaScript από τον browser του. Προστατεύει μόνο από ακούσια χρήση μέσω του κανονικού UI.
+ * ===================================================================== */
+const DEV_MODE = false;
+if (!DEV_MODE) { document.getElementById("goTest")?.remove(); document.getElementById("test")?.remove(); }
+else document.getElementById("goTest").hidden = false;
+
 /* =====================================================================
  *  ΜΟΝΑΔΑ ΟΜΟΙΟΤΗΤΑΣ (Similarity) — τοπικό AI στον browser, χωρίς backend.
  *  Για να αλλάξεις μοντέλο, άλλαξε ΜΟΝΟ το CONFIG παρακάτω.
@@ -344,9 +404,15 @@ const CONFIG = {
   threshold: 0.72,                       // ελάχιστη ομοιότητα με την παροιμία ή το νόημά της
   margin: 0.07,                          // πόσο πιο κοντά πρέπει να είναι από κάθε ΑΛΛΗ παροιμία
   lexical: { minOverlap: 0.7, minCos: 0.5 }, // εναλλακτική διαδρομή: σχεδόν ίδιες λέξεις + ελάχιστη ομοιότητα
+  completeness: { minCoverage: 0.75, minLength: 0.8 },  // η απάντηση πρέπει να καλύπτει την παροιμία: ≥75% των λέξεών της ή (παράφραση) ≥80% του μήκους της
   minWords: 3,                           // μονολεκτικές απαντήσεις δεν γίνονται δεκτές
+  maxChars: 300,                         // μέγιστο μήκος απάντησης (προστασία από τεράστιες εισόδους)
+  negationLexical: 0.5,                  // αν η απάντηση μοιάζει λεκτικά με την παροιμία αλλά έχει αντίθετη άρνηση = αντίφαση (απόρριψη)
+  negationPenalty: 0.10,                 // αν διαφέρει η άρνηση αλλά με άλλα λόγια: απαιτείται τόση επιπλέον ομοιότητα
   guards: { negation: true, numbers: true }
 };
+// Παραγωγή: οι ρυθμίσεις παγώνουν και δεν αλλάζουν από τίποτα μέσα στη σελίδα. Μόνο το DEV_MODE τις αφήνει μεταβλητές.
+if (!DEV_MODE) { Object.freeze(CONFIG.lexical); Object.freeze(CONFIG.completeness); Object.freeze(CONFIG.guards); Object.freeze(CONFIG); }
 
 const Similarity = (() => {
   let extractor = null, loading = null;
@@ -358,28 +424,57 @@ const Similarity = (() => {
     .replace(/ς/g, "σ").replace(/[^\p{L}\p{N}\s]/gu, " ").replace(/\s+/g, " ").trim();
 
   // --- Έλεγχοι ασφαλείας: η σημασιολογική ομοιότητα δεν ξεχωρίζει καλά άρνηση ή αριθμούς
-  const NEG = new Set(["δεν", "μη", "μην", "ουτε", "οχι", "καθολου"]);
-  const NUMW = { ενα:1, ενας:1, μια:1, μιας:1, εναν:1, δυο:2, τρια:3, τρεις:3, τεσσερα:4, τεσσερις:4, πεντε:5, εξι:6, επτα:7, οκτω:8, εννια:9, δεκα:10 };
+  const NEG = new Set(["δεν", "μη", "μην", "ουτε", "οχι"].map(norm));
   const hasNeg = n => n.split(" ").some(w => NEG.has(w));
-  const nums = n => new Set(n.split(" ").map(w => /^\d+$/.test(w) ? +w : NUMW[w]).filter(x => x !== undefined && x !== 1));
-  function guardsOk(a, b) {
-    const A = norm(a), B = norm(b);
-    if (CONFIG.guards.negation && hasNeg(A) !== hasNeg(B)) return false;
+  // Αριθμοί: λέξεις και ψηφία → τιμή. Το «ένα/μία» είναι και άρθρο, άρα «ασθενές»: δεν απαιτείται να υπάρχει,
+  // αλλά αν η απάντηση έχει άλλον αριθμό που δεν υπάρχει στην παροιμία (π.χ. «δύο»), απορρίπτεται.
+  const NUMW = Object.create(null);
+  const addNum = (v, words) => words.split(" ").forEach(w => { NUMW[norm(w)] = v; });
+  addNum(1, "ενα μια μιαν ενας εναν μιας ενος"); addNum(2, "δυο δυω"); addNum(3, "τρια τρεις τριων τριες"); addNum(4, "τεσσερα τεσσερις τεσσαρα");
+  addNum(5, "πεντε"); addNum(6, "εξι εξη"); addNum(7, "επτα εφτα"); addNum(8, "οκτω οχτω"); addNum(9, "εννια εννεα"); addNum(10, "δεκα");
+  addNum(11, "ενδεκα"); addNum(12, "δωδεκα"); addNum(20, "εικοσι"); addNum(30, "τριαντα"); addNum(40, "σαραντα"); addNum(50, "πενηντα");
+  addNum(100, "εκατο εκατον"); addNum(1000, "χιλια χιλιαδες");
+  function numInfo(n) {
+    const strong = new Set(), all = new Set();
+    n.split(" ").forEach(w => {
+      const d = w.match(/\d+/g);
+      if (d) d.forEach(x => { const v = parseInt(x, 10); strong.add(v); all.add(v); });
+      else if (NUMW[w] !== undefined) { all.add(NUMW[w]); if (NUMW[w] !== 1) strong.add(NUMW[w]); }
+    });
+    return { strong, all };
+  }
+  // null = απόρριψη· αλλιώς επιπλέον ομοιότητα που απαιτείται (0 = καμία)
+  function guard(ref, user, allowed) {
+    const A = norm(ref), B = norm(user);
     if (CONFIG.guards.numbers) {
-      const x = nums(A), y = nums(B);
-      if (x.size && y.size && [...x].join() !== [...y].join()) return false;
+      const rn = numInfo(A), un = numInfo(B);
+      for (const v of rn.strong) if (!un.all.has(v)) return null;      // αριθμός της παροιμίας που λείπει ή άλλαξε
+      for (const v of un.strong) if (!allowed.has(v)) return null;     // αριθμός που προσθέτει ο παίκτης και δεν υπάρχει στην παροιμία
     }
-    return true;
+    let penalty = 0;
+    if (CONFIG.guards.negation && hasNeg(A) !== hasNeg(B)) {
+      if (lexical(ref, user) >= CONFIG.negationLexical) return null;   // ίδιες λέξεις + αντίθετη άρνηση = αντίφαση
+      penalty = CONFIG.negationPenalty;                                // άλλη διατύπωση (π.χ. θετική αντί αρνητικής): πιο αυστηρό κατώφλι
+    }
+    return penalty;
   }
 
   // --- Επικάλυψη λέξεων (με κοπή στα 5 γράμματα, χωρίς συνηθισμένες λέξεις)
-  const STOP = new Set(["οποιοσ","οποιος","οσο","και","την","τον","του","της","των","τις","στο","στη","στον","απο","για","που","οτι","ειναι","μου","σου","μια","ενα","οι","τα","το","να","με","σε"]);
+  const STOP = new Set(["οποιος","οσο","και","την","τον","του","της","των","τις","στο","στη","στον","απο","για","που","οτι","ειναι","μου","σου","μια","ενα","οι","τα","το","να","με","σε"].map(norm));
   const stems = n => new Set(n.split(" ").filter(w => w.length > 2 && !STOP.has(w)).map(w => w.slice(0, 5)));
   function lexical(ref, user) {
     const r = stems(norm(ref)), u = stems(norm(user));
     if (!r.size) return 0;
     let c = 0; r.forEach(x => { if (u.has(x)) c++; });
     return c / r.size;
+  }
+
+  // Πληρότητα: ημιτελής απάντηση (π.χ. μόνο η αρχή της παροιμίας) δεν περνά, όσο κοντά κι αν είναι σημασιολογικά.
+  // Ή καλύπτει τις περισσότερες λέξεις της αναφοράς, ή (παράφραση) έχει αντίστοιχο πλήθος ουσιαστικών λέξεων.
+  function complete(ref, user) {
+    const R = stems(norm(ref)).size, U = stems(norm(user)).size;
+    if (!R) return true;
+    return lexical(ref, user) >= CONFIG.completeness.minCoverage || U >= Math.ceil(CONFIG.completeness.minLength * R);
   }
 
   // --- Φόρτωση μοντέλου (μία φορά· cache στο Cache API του browser)
@@ -426,30 +521,34 @@ const Similarity = (() => {
   // Μετρικές: ομοιότητα με την αναφορά και με την πιο κοντινή ΑΛΛΗ παροιμία
   async function metrics(refs, userText, rivals = []) {
     const u = await embed(userText);
+    const allowed = new Set(); refs.forEach(r => numInfo(norm(r)).all.forEach(v => allowed.add(v)));
     let best = null, bestAny = null, lex = 0;
     for (const r of refs) {
-      const s = cosine(u, await embed(r));
-      if (!bestAny || s > bestAny) bestAny = s;
-      if (!guardsOk(r, userText)) continue;
-      if (best === null || s > best) best = s;
+      const sc = cosine(u, await embed(r));
+      if (bestAny === null || sc > bestAny) bestAny = sc;
+      const pen = guard(r, userText, allowed);
+      if (pen === null) continue;
+      if (best === null || sc - pen > best.score - best.penalty) best = { score: sc, penalty: pen, comp: complete(r, userText) };   // πληρότητα ως προς την αναφορά που ταιριάζει περισσότερο
       lex = Math.max(lex, lexical(r, userText));
     }
     let rival = 0;
     for (const r of rivals) rival = Math.max(rival, cosine(u, await embed(r)));
-    return { score: best ?? bestAny, lex, rival, guards: best !== null };
+    return { score: best ? best.score : bestAny, penalty: best ? best.penalty : 0, lex, rival, guards: best !== null, complete: best ? best.comp : false };
   }
 
   // Απόφαση: αυστηρή, με βάση το τρέχον CONFIG
   function decide(m) {
-    if (!m.guards) return false;
-    if (m.lex >= CONFIG.lexical.minOverlap && m.score >= CONFIG.lexical.minCos && m.score >= m.rival) return true;
-    return m.score >= CONFIG.threshold && m.score - m.rival >= CONFIG.margin;
+    if (!m.guards || m.complete === false) return false;
+    const pen = m.penalty || 0;
+    if (pen === 0 && m.lex >= CONFIG.lexical.minOverlap && m.score >= CONFIG.lexical.minCos && m.score >= m.rival) return true;
+    return m.score >= CONFIG.threshold + pen && m.score - m.rival >= CONFIG.margin;
   }
 
   // --- Δημόσιο API ---
   // refs: προτάσεις αναφοράς · rivals: οι υπόλοιπες παροιμίες. Επιστρέφει ΜΟΝΟ { similar: boolean }.
   async function check(refs, userText, rivals = []) {
     refs = [].concat(refs);
+    if (typeof userText !== "string" || userText.length > CONFIG.maxChars) return { similar: false };
     const n = norm(userText);
     if (n.split(" ").filter(Boolean).length < CONFIG.minWords) return { similar: false };
     if (refs.some(r => norm(r) === n)) return { similar: true };
@@ -457,7 +556,7 @@ const Similarity = (() => {
   }
   // Μόνο για τη σελίδα βαθμονόμησης:
   const debug = (refs, userText, rivals) => metrics([].concat(refs), userText, rivals);
-  return { load, check, debug, decide, warm, norm };
+  return { load, check, debug, decide, warm, norm, internals: { guard, numInfo, lexical, complete } };   // internals: μόνο για δοκιμές
 })();
 
 /* =====================================================================
@@ -508,8 +607,9 @@ const shuffle = a => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { c
 const wait = ms => new Promise(r => setTimeout(r, ms));
 function restart(el, c) { el.classList.remove(c); void el.offsetWidth; el.classList.add(c); }
 function show(id) {
-  ["home","setup","game","end","test"].forEach(s => $(s).hidden = s !== id);
-  restart($(id), "enter"); window.scrollTo(0, 0);
+  ["home","setup","game","end","test"].forEach(s => { const e = $(s); if (e) e.hidden = s !== id; });
+  if ($(id)) restart($(id), "enter");
+  window.scrollTo(0, 0);
 }
 
 /* ---- εφέ ---- */
@@ -599,13 +699,13 @@ TIMES.forEach((o, i) => {
 });
 
 /* ---- παιχνίδι: 5 εύκολες, 10 μεσαίες, 5 δύσκολες ---- */
-let phase = "q", lastRes = null, active = false, results = [], timerSecs = 0, pool = [], idx = 0, total = 0, shown = 0, hintsUsed = 0, timeLeft = 0, tick = null, locked = true, checking = false, run = 0, stats = {};
+let qOpen = false, curQ = 0, deadline = 0, phase = "q", lastRes = null, active = false, results = [], timerSecs = 0, pool = [], idx = 0, total = 0, shown = 0, hintsUsed = 0, timeLeft = 0, tick = null, locked = true, checking = false, run = 0, stats = {};
 const buildPool = () => LEVELS.flatMap(L => shuffle(PROVERBS.filter(p => p.lv === L.lv)).slice(0, L.n).map(p => ({ p, L })));
 
 /* ---- αποθήκευση προόδου (localStorage): το παιχνίδι συνεχίζεται μετά από ανανέωση ---- */
 const SAVE_KEY = "paroimies.save.v1";
 function saveGame() {
-  if (!active || !pool.length) return;
+  if (!active || !pool.length || idx >= pool.length) return;
   try { localStorage.setItem(SAVE_KEY, JSON.stringify({ v: 1, timerSecs, pool: pool.map(x => x.p.t), idx, results, total, stats, phase, hintsUsed, timeLeft, answer: phase === "q" ? $("answer").value : "", res: lastRes })); } catch (e) {}
 }
 function clearSave() { try { localStorage.removeItem(SAVE_KEY); } catch (e) {} }
@@ -618,14 +718,49 @@ function renderReveal(p, L, won, timeout, gained) {
   r.appendChild(s);
   $("next").textContent = idx + 1 >= pool.length ? "Δες το αποτέλεσμα" : (pool[idx + 1].L !== L ? "Επόμενο επίπεδο" : "Επόμενη παροιμία");
 }
+/* Η αποθήκευση θεωρείται ΜΗ αξιόπιστη: ό,τι διαβάζεται επικυρώνεται πριν χρησιμοποιηθεί.
+   (Ένας παίκτης που ελέγχει τον browser του μπορεί πάντα να γράψει ό,τι θέλει στο localStorage.) */
+const TOTAL_Q = LEVELS.reduce((a, L) => a + L.n, 0);
+function sanitizeSave(d) {
+  const isInt = (v, lo, hi) => Number.isInteger(v) && v >= lo && v <= hi;
+  if (!d || typeof d !== "object" || Array.isArray(d) || d.v !== 1) return null;
+  if (![0, 30, 60, 90].includes(d.timerSecs)) return null;
+  if (!Array.isArray(d.pool) || d.pool.length !== TOTAL_Q) return null;
+  const items = [], seen = new Set();
+  for (const t of d.pool) {
+    if (typeof t !== "string" || seen.has(t)) return null; seen.add(t);
+    const p = PROVERBS.find(x => x.t === t); if (!p) return null;
+    items.push({ p, L: LEVELS.find(l => l.lv === p.lv) });
+  }
+  let k = 0; for (const L of LEVELS) for (let i = 0; i < L.n; i++) if (items[k++].L !== L) return null;   // 5 εύκολες, 10 μεσαίες, 5 δύσκολες με τη σειρά
+  if (!isInt(d.idx, 0, TOTAL_Q - 1) || (d.phase !== "q" && d.phase !== "a")) return null;
+  if (!Array.isArray(d.results) || d.results.length > d.idx + 1) return null;
+  const results = [];
+  for (let i = 0; i <= d.idx; i++) { const r = d.results[i]; if (r === 0 || r === 1) results[i] = r; else if (r === null || r === undefined) results[i] = undefined; else return null; }
+  for (let i = 0; i < d.idx; i++) if (results[i] === undefined) return null;
+  const maxQ = 100 + (d.timerSecs ? 20 : 0);
+  let res = null;
+  if (d.phase === "a") {
+    const r = d.res, to = r && r.timeout === undefined ? false : r && r.timeout;   // παλαιότερες αποθηκεύσεις δεν είχαν «timeout» στο παράτημα
+    if (results[d.idx] === undefined || !r || typeof r.won !== "boolean" || typeof to !== "boolean" || r.won !== (results[d.idx] === 1) || (r.won && to)) return null;
+    if (r.won ? !isInt(r.gained, 25, maxQ) : r.gained !== 0) return null;
+    res = { won: r.won, timeout: to, gained: r.gained };
+  } else if (results[d.idx] !== undefined) return null;
+  const won = results.filter(r => r === 1).length;
+  if (!isInt(d.total, won * 25, won * maxQ)) return null;           // αδύνατο σκορ
+  if (!isInt(d.hintsUsed, 0, 3)) return null;
+  if (d.timerSecs && !isInt(d.timeLeft, 0, d.timerSecs)) return null;
+  const stats = { 1: 0, 2: 0, 3: 0 }; results.forEach((r, i) => { if (r === 1) stats[items[i].L.lv]++; });   // τα στατιστικά υπολογίζονται από τα αποτελέσματα
+  return { items, timerSecs: d.timerSecs, idx: d.idx, phase: d.phase, results, total: d.total, stats, hintsUsed: d.hintsUsed,
+    timeLeft: d.timerSecs ? d.timeLeft : 0, answer: typeof d.answer === "string" ? d.answer.slice(0, CONFIG.maxChars) : "", res };
+}
 function restoreGame() {
-  let d = null; try { d = JSON.parse(localStorage.getItem(SAVE_KEY) || "null"); } catch (e) {}
-  if (!d || d.v !== 1 || !Array.isArray(d.pool) || !(d.idx >= 0) || d.idx >= d.pool.length) return false;
-  const items = d.pool.map(t => { const p = PROVERBS.find(x => x.t === t); return p && { p, L: LEVELS.find(l => l.lv === p.lv) }; });
-  if (items.some(x => !x)) { clearSave(); return false; }
-  ++run; pool = items; idx = d.idx; results = (d.results || []).map(r => r === null ? undefined : r);
-  total = shown = d.total || 0; stats = d.stats || { 1: 0, 2: 0, 3: 0 }; timerSecs = d.timerSecs || 0;
-  phase = d.phase === "a" ? "a" : "q"; lastRes = d.res || null; hintsUsed = d.hintsUsed || 0; active = true;
+  let raw; try { raw = localStorage.getItem(SAVE_KEY); } catch (e) { return false; }
+  if (!raw) return false;
+  let d = null; try { if (raw.length <= 20000) d = sanitizeSave(JSON.parse(raw)); } catch (e) {}
+  if (!d) { clearSave(); return false; }                              // κατεστραμμένη ή ασυνεπής αποθήκευση: καθαρίζει και ξεκινά κανονικά
+  ++run; curQ++; qOpen = false; pool = d.items; idx = d.idx; results = d.results; total = shown = d.total; stats = d.stats; timerSecs = d.timerSecs;
+  phase = d.phase; lastRes = d.res; hintsUsed = d.hintsUsed; active = true; giveStreak = 0;
   pool.forEach(x => preload(x.p.e));
   show("game"); $("steps").innerHTML = ""; renderSteps(); $("score").textContent = total + " β.";
   const { p, L } = pool[idx];
@@ -635,24 +770,95 @@ function restoreGame() {
   renderEmoji($("tile"), p.e); $("tile").classList.remove("win", "lose");
   renderHints();
   const a = $("answer"); a.classList.remove("wrong"); $("msg").className = "msg"; $("msg").textContent = "";
-  if (phase === "a" && lastRes) {
+  if (phase === "a") {
     locked = true; a.value = ""; a.disabled = true; $("play").hidden = true; $("after").hidden = false; $("timer").hidden = true; $("hint").disabled = true;
     $("tile").classList.add(lastRes.won ? "win" : "lose");
     renderReveal(p, L, lastRes.won, lastRes.timeout, lastRes.gained);
   } else {
-    phase = "q"; locked = false; a.value = d.answer || ""; a.disabled = false; $("check").disabled = false; $("check").textContent = "Έλεγχος";
+    locked = false; qOpen = true; a.value = d.answer; a.disabled = false; $("check").disabled = false; $("check").textContent = "Έλεγχος";
     $("after").hidden = true; $("play").hidden = false; $("msg").textContent = "Συνεχίζεις από εκεί που σταμάτησες.";
-    if (timerSecs && (d.timeLeft ?? 1) <= 0) endQuestion(false, true); else startTimer(d.timeLeft);
+    if (timerSecs && d.timeLeft <= 0) endQuestion(false, true); else startTimer(d.timeLeft);
   }
   loadModel();
   return true;
 }
 
+/* ---- προσωπικά ρεκόρ: ιστορικό ολοκληρωμένων παιχνιδιών (localStorage). Τα δεδομένα επικυρώνονται πάντα όταν διαβάζονται. ---- */
+const REC_KEY = "paroimies.records.v1", REC_MAX = 100;
+const validGame = g => {
+  if (!g || typeof g !== "object" || !Number.isFinite(g.ts) || ![0, 30, 60, 90].includes(g.timerSecs)) return false;
+  if (!Array.isArray(g.lv) || g.lv.length !== LEVELS.length || !g.lv.every((v, i) => Number.isInteger(v) && v >= 0 && v <= LEVELS[i].n)) return false;
+  const won = g.lv.reduce((a, b) => a + b, 0), mx = 100 + (g.timerSecs ? 20 : 0);
+  return Number.isInteger(g.score) && g.score >= won * 25 && g.score <= won * mx;
+};
+function loadRecords() {
+  try {
+    const raw = localStorage.getItem(REC_KEY); if (!raw || raw.length > 60000) return [];
+    const d = JSON.parse(raw); return d && d.v === 1 && Array.isArray(d.games) ? d.games.filter(validGame).slice(-REC_MAX) : [];
+  } catch (e) { return []; }
+}
+function recordGame() {                                                // καλείται μία φορά, όταν ολοκληρώνεται παιχνίδι
+  const games = loadRecords(), same = games.filter(g => g.timerSecs === timerSecs);
+  const prevBest = same.length ? Math.max(...same.map(g => g.score)) : null;
+  games.push({ ts: Date.now(), timerSecs, score: total, lv: LEVELS.map(L => stats[L.lv]) });
+  try { localStorage.setItem(REC_KEY, JSON.stringify({ v: 1, games: games.slice(-REC_MAX) })); } catch (e) {}
+  return { prevBest };
+}
+const timeLabel = t => t ? t + " δλ" : "Χωρίς χρόνο";
+const RFILTERS = [{ v: null, l: "Όλα" }, { v: 0, l: "Χωρίς χρόνο" }, { v: 30, l: "30 δλ" }, { v: 60, l: "60 δλ" }, { v: 90, l: "90 δλ" }];
+let recFilter = null, resetArmed = false, resetTimer = 0;
+const RESET_LABEL = "Διαγραφή όλων των ρεκόρ…";
+function disarmReset() { resetArmed = false; clearTimeout(resetTimer); const b = $("rReset"); b.textContent = RESET_LABEL; b.classList.remove("armed"); b.disabled = false; }
+function renderRecords() {
+  const all = loadRecords(), games = recFilter === null ? all : all.filter(g => g.timerSecs === recFilter);
+  const fl = $("rFilter"); fl.innerHTML = "";
+  RFILTERS.forEach(o => { const b = document.createElement("button"); b.textContent = o.l; b.setAttribute("aria-pressed", String(o.v === recFilter)); b.onclick = () => { recFilter = o.v; renderRecords(); }; fl.appendChild(b); });
+  $("rData").hidden = !all.length;
+  const body = $("rBody");
+  if (!games.length) { body.innerHTML = '<p class="muted">Δεν υπάρχει ακόμα ολοκληρωμένο παιχνίδι' + (recFilter === null ? "" : " με αυτόν τον χρόνο") + '. Τελείωσε ένα για να ξεκινήσει το ιστορικό σου.</p>'; return; }
+  const scores = games.map(g => g.score), n = games.length, best = Math.max(...scores), mean = a => a.reduce((x, y) => x + y, 0) / a.length, avg = Math.round(mean(scores));
+  let trend = "";
+  if (n >= 2) {
+    const k = Math.min(5, Math.floor(n / 2)), dlt = Math.round(mean(scores.slice(-k)) - mean(scores.slice(-2 * k, -k)));
+    trend = dlt > 0 ? `<p class="rtrend up">Βελτίωση: +${dlt} β. (τελευταία ${k} σε σχέση με τα ${k} πριν)</p>` : dlt < 0 ? `<p class="rtrend down">Πτώση: −${-dlt} β. (τελευταία ${k} σε σχέση με τα ${k} πριν)</p>` : `<p class="rtrend">Σταθερή απόδοση σε σχέση με τα προηγούμενα παιχνίδια.</p>`;
+  }
+  const pts = games.slice(-20), N = pts.length, W = 400, H = 150, pl = 12, pr = 12, pt = 18, pb = 24, maxV = Math.max(best, 1);
+  const X = i => N === 1 ? W / 2 : pl + i * (W - pl - pr) / (N - 1), Y = v => pt + (H - pt - pb) * (1 - v / maxV);
+  let svg = `<svg class="rchart" viewBox="0 0 ${W} ${H}" role="img" aria-label="Βαθμοί ανά παιχνίδι">`;
+  svg += `<line x1="${pl}" x2="${W - pr}" y1="${H - pb}" y2="${H - pb}" style="stroke:var(--line);stroke-width:2"/>`;
+  svg += `<line x1="${pl}" x2="${W - pr}" y1="${Y(best).toFixed(1)}" y2="${Y(best).toFixed(1)}" style="stroke:var(--easy);stroke-width:1.5;stroke-dasharray:4 4"/>`;
+  svg += `<text x="${W - pr}" y="${(Y(best) - 5).toFixed(1)}" text-anchor="end" style="font-size:10px;fill:var(--good-t);font-weight:600">ρεκόρ ${best}</text>`;
+  if (N > 1) svg += `<polyline points="${pts.map((g, i) => X(i).toFixed(1) + "," + Y(g.score).toFixed(1)).join(" ")}" style="fill:none;stroke:var(--accent);stroke-width:3;stroke-linejoin:round;stroke-linecap:round"/>`;
+  pts.forEach((g, i) => { svg += `<circle cx="${X(i).toFixed(1)}" cy="${Y(g.score).toFixed(1)}" r="${i === N - 1 ? 6 : 4}" style="fill:${g.score === best ? "var(--easy)" : "var(--accent)"};stroke:var(--ink);stroke-width:2"/>`; });
+  const ord = i => n - N + i + 1;
+  svg += `<text x="${X(0).toFixed(1)}" y="${H - 8}" text-anchor="${N === 1 ? "middle" : "start"}" style="font-size:10px;fill:var(--muted)">#${ord(0)}</text>`;
+  if (N > 1) svg += `<text x="${X(N - 1).toFixed(1)}" y="${H - 8}" text-anchor="end" style="font-size:10px;fill:var(--muted)">#${ord(N - 1)}</text>`;
+  svg += "</svg>";
+  const lvRows = LEVELS.map((L, i) => { const pct = Math.round(games.reduce((a, g) => a + g.lv[i], 0) / (L.n * n) * 100); return `<div class="lvrow"><span class="${L.cls}">${L.name}</span><div class="bar"><i style="width:${pct}%;background:var(--${L.cls})"></i></div><b>${pct}%</b></div>`; }).join("");
+  const rows = games.slice(-5).reverse().map(g => `<div><span>${new Date(g.ts).toLocaleDateString("el-GR", { day: "numeric", month: "short" })} · ${timeLabel(g.timerSecs)}</span><span>${g.lv.reduce((a, b) => a + b, 0)}/${TOTAL_Q}</span><b>${g.score} β.</b></div>`).join("");
+  body.innerHTML = `<div class="rstats"><div class="card"><span>Καλύτερο</span><b>${best}</b><small>βαθμοί</small></div><div class="card"><span>Μέσος όρος</span><b>${avg}</b><small>βαθμοί</small></div><div class="card"><span>Παιχνίδια</span><b>${n}</b><small>ολοκληρωμένα</small></div></div>${trend}<p class="rsub">Τα τελευταία ${N} παιχνίδια</p>${svg}<p class="rsub">Επιτυχία ανά επίπεδο</p><div class="rlv">${lvRows}</div><p class="rsub">Πρόσφατα</p><div class="rlist">${rows}</div>`;
+}
+const closeRec = () => { $("recModal").hidden = true; disarmReset(); $("rData").open = false; };
+$("goRecords").onclick = () => { recFilter = null; renderRecords(); $("recModal").hidden = false; $("rClose").focus(); };
+$("rClose").onclick = closeRec;
+$("recModal").addEventListener("click", e => { if (e.target === $("recModal")) closeRec(); });
+addEventListener("keydown", e => { if (e.key === "Escape" && !$("recModal").hidden) closeRec(); });
+$("rReset").onclick = () => {
+  if (!resetArmed) {
+    // 1ο πάτημα: μόνο οπλίζει. Το κουμπί μένει κλειδωμένο για 1,2 δλ ώστε ένα διπλό κλικ να μην το επιβεβαιώσει.
+    resetArmed = true; const b = $("rReset"); b.classList.add("armed"); b.textContent = "Θα διαγραφούν για πάντα. Πάτα ξανά για επιβεβαίωση"; b.disabled = true;
+    setTimeout(() => { if (resetArmed) b.disabled = false; }, 1200);
+    resetTimer = setTimeout(disarmReset, 5000); return;
+  }
+  try { localStorage.removeItem(REC_KEY); } catch (e) {}
+  disarmReset(); $("rData").open = false; renderRecords();
+};
+
 function startGame() {
   const my = ++run;
   pool = buildPool(); results = []; idx = 0; total = 0; shown = 0; stats = { 1: 0, 2: 0, 3: 0 };
   $("score").textContent = "0 β."; $("steps").innerHTML = "";
-  active = true; phase = "q"; lastRes = null; hintsUsed = 0; timeLeft = timerSecs; $("answer").value = ""; saveGame();
+  giveStreak = 0; active = true; phase = "q"; lastRes = null; hintsUsed = 0; timeLeft = timerSecs; $("answer").value = ""; saveGame();
   pool.forEach(x => preload(x.p.e)); show("game"); loadModel(); nextQuestion(my);
 }
 function renderSteps() {
@@ -661,7 +867,7 @@ function renderSteps() {
   [...st.children].forEach((e, i) => { e.classList.toggle("done", results[i] === 1); e.classList.toggle("skip", results[i] === 0); e.classList.toggle("cur", i === idx && results[i] === undefined); });
 }
 async function nextQuestion(my) {
-  clearInterval(tick); locked = true;
+  clearInterval(tick); locked = true; qOpen = false; curQ++; checking = false;   // νέα ταυτότητα ερώτησης: ό,τι εκκρεμεί από την προηγούμενη αγνοείται
   if (idx >= pool.length) return finish();
   const { p, L } = pool[idx];
   ["play","after","hintbox","timer"].forEach(i => $(i).hidden = true);
@@ -672,7 +878,7 @@ async function nextQuestion(my) {
   $("lvName").textContent = L.name; $("lvName").className = L.cls;
   $("qn").textContent = (pool.slice(0, idx).filter(x => x.L === L).length + 1) + " / " + L.n;
   renderEmoji($("tile"), p.e); restart($("tile"), "flip");
-  phase = "q"; lastRes = null; hintsUsed = 0; locked = false;
+  phase = "q"; lastRes = null; hintsUsed = 0; locked = false; qOpen = true;
   $("hintbox").innerHTML = "";
   const a = $("answer"); a.value = ""; a.disabled = false; a.classList.remove("wrong");
   $("msg").textContent = ""; $("msg").className = "msg";
@@ -686,17 +892,18 @@ function startTimer(left) {
   clearInterval(tick);
   $("timer").hidden = !timerSecs;
   if (!timerSecs) return;
-  timeLeft = left ?? timerSecs;
-  const fill = $("timerFill");
+  timeLeft = Math.max(0, Math.min(timerSecs, left ?? timerSecs));
+  deadline = Date.now() + timeLeft * 1000;                           // ο χρόνος μετριέται από προθεσμία, όχι από «τικ»: δεν παγώνει/καθυστερεί σε άλλη καρτέλα
+  const fill = $("timerFill"), myQ = curQ;
   $("timer").classList.remove("low");
   fill.style.transition = "none"; fill.style.width = (timeLeft / timerSecs * 100) + "%"; $("timer").classList.toggle("low", timeLeft <= 10);
   requestAnimationFrame(() => requestAnimationFrame(() => { fill.style.transition = ""; }));
   tick = setInterval(() => {
-    timeLeft--;
-    fill.style.width = Math.max(0, timeLeft / timerSecs * 100) + "%";
-    $("timer").classList.toggle("low", timeLeft <= 10); saveGame();
+    if (myQ !== curQ || !qOpen) { clearInterval(tick); return; }      // η ερώτηση άλλαξε ή τελείωσε
+    const l = Math.max(0, Math.ceil((deadline - Date.now()) / 1000));
+    if (l !== timeLeft) { timeLeft = l; fill.style.width = (l / timerSecs * 100) + "%"; $("timer").classList.toggle("low", l <= 10); saveGame(); }
     if (timeLeft <= 0) { clearInterval(tick); endQuestion(false, true); }
-  }, 1000);
+  }, 250);
 }
 
 function hintTexts(t) {
@@ -711,17 +918,18 @@ function renderHints() {
   $("hint").textContent = hintsUsed >= 3 ? "Καμία άλλη υπόδειξη" : "Υπόδειξη (" + (3 - hintsUsed) + ")";
   $("hint").disabled = hintsUsed >= 3;
 }
-$("hint").onclick = () => { if (locked || hintsUsed >= 3) return; hintsUsed++; renderHints(); saveGame(); };
+$("hint").onclick = () => { if (!qOpen || hintsUsed >= 3) return; hintsUsed++; renderHints(); saveGame(); };
 
 async function submit() {
-  if (locked || checking) return;
+  if (!qOpen || checking) return;
   const text = $("answer").value.trim();
   if (!text) return;
+  const myQ = curQ, p = pool[idx].p;                                  // ταυτότητα ερώτησης: μια καθυστερημένη απάντηση του AI δεν επηρεάζει τίποτα
   checking = true; $("check").disabled = true; $("check").textContent = "Έλεγχος…";
   $("msg").className = "msg"; $("msg").textContent = modelState === "ready" ? "" : "Φόρτωση μοντέλου, περίμενε λίγο…";
   try {
-    const p = pool[idx].p;
     const result = await Similarity.check([p.t, p.alt], text, rivalsFor(p));   // { similar: true | false }
+    if (myQ !== curQ || !qOpen) return;                               // έληξε ο χρόνος, τελείωσε ή άλλαξε η ερώτηση: αγνοείται
     setStatus("ready"); $("msg").textContent = "";
     if (result.similar) endQuestion(true);
     else {
@@ -729,35 +937,71 @@ async function submit() {
       const a = $("answer"); restart(a, "shake"); a.classList.add("wrong"); setTimeout(() => a.classList.remove("wrong"), 700);
     }
   } catch (e) {
-    console.error(e); setStatus("error");
+    console.error(e);
+    if (myQ !== curQ || !qOpen) return;
+    setStatus("error");
     $("msg").className = "msg bad"; $("msg").textContent = "Η σύγκριση απέτυχε. Δοκίμασε ξανά όταν φορτώσει το μοντέλο.";
-  } finally { checking = false; if (!locked) { $("check").disabled = false; $("check").textContent = "Έλεγχος"; } }
+  } finally { if (myQ === curQ) { checking = false; if (qOpen) { $("check").disabled = false; $("check").textContent = "Έλεγχος"; } } }
 }
 $("check").onclick = submit;
 $("answer").addEventListener("input", saveSoon);
 $("answer").addEventListener("keydown", e => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); submit(); } });
-$("giveup").onclick = () => { if (!locked) endQuestion(false); };
+/* Παράτημα: το παράθυρο επιβεβαίωσης εμφανίζεται μόνο όταν πατήσεις «Τα παρατάω» GIVEUP_STREAK φορές «στη σειρά»
+   και έχεις πάνω από GIVEUP_MIN_POINTS βαθμούς. «Στη σειρά» = χωρίς νίκη ενδιάμεσα: λάθος απόπειρες ή λήξη χρόνου
+   δεν σπάνε τη σειρά, μια σωστή απάντηση τη μηδενίζει. Μετά την εμφάνιση του παραθύρου η σειρά μηδενίζεται. */
+const GIVEUP_STREAK = 3, GIVEUP_MIN_POINTS = 20;
+let giveStreak = 0;
+const closeGive = () => { $("giveModal").hidden = true; };
+function endGameEarly() { if (!active) return; clearInterval(tick); qOpen = false; curQ++; finish(true); }
+$("giveup").onclick = () => {
+  if (!qOpen) return;
+  giveStreak++;
+  if (giveStreak >= GIVEUP_STREAK && total > GIVEUP_MIN_POINTS) {
+    const n = giveStreak; giveStreak = 0;
+    $("gText").textContent = "Πάτησες «Τα παρατάω» " + n + " φορές στη σειρά και έχεις " + total + " βαθμούς. Θέλεις να τελειώσεις εδώ το παιχνίδι;";
+    $("giveModal").hidden = false; $("gEnd").focus(); return;
+  }
+  endQuestion(false);
+};
+$("gClose").onclick = closeGive;                                       // το Χ απλώς κλείνει: η ερώτηση μένει και το επόμενο «Τα παρατάω» δεν ξαναρωτά
+$("gSkip").onclick = () => { closeGive(); endQuestion(false); };
+$("gEnd").onclick = () => { closeGive(); endGameEarly(); };
+$("giveModal").addEventListener("click", e => { if (e.target === $("giveModal")) closeGive(); });
+addEventListener("keydown", e => { if (e.key === "Escape" && !$("giveModal").hidden) closeGive(); });
 
 function endQuestion(won, timeout) {
-  locked = true; clearInterval(tick);
+  if (!qOpen) return;                                                 // κάθε ερώτηση ολοκληρώνεται ΜΙΑ φορά (νίκη, χρόνος ή παράτημα)
+  qOpen = false; locked = true; clearInterval(tick); $("giveModal").hidden = true;
+  if (timeout) won = false;                                           // λήξη χρόνου δεν γίνεται ποτέ νίκη
   const { p, L } = pool[idx], tile = $("tile");
   let gained = 0;
-  if (won) { gained = Math.max(25, 100 - hintsUsed * 25) + (timerSecs ? Math.round(timeLeft / timerSecs * 20) : 0); total += gained; stats[L.lv]++; }
+  if (won) { gained = Math.max(25, 100 - Math.min(3, hintsUsed) * 25) + (timerSecs ? Math.round(Math.max(0, Math.min(timerSecs, timeLeft)) / timerSecs * 20) : 0); total += gained; stats[L.lv]++; giveStreak = 0; }
   results[idx] = won ? 1 : 0; renderSteps();
   countUp($("score"), shown, total); shown = total; if (won) restart($("score"), "bump");
   $("answer").disabled = true; $("play").hidden = true; $("after").hidden = false;
   if (won) { restart(tile, "win"); confetti(...centerOf(tile)); floatText("+" + gained, tile); }
   else restart(tile, "lose");
-  renderReveal(p, L, won, timeout, gained); phase = "a"; lastRes = { won, timeout, gained }; saveGame();
+  renderReveal(p, L, won, timeout, gained); phase = "a"; lastRes = { won, timeout: !!timeout, gained }; saveGame();
   $("next").focus({ preventScroll: true });
 }
-$("next").onclick = () => { idx++; phase = "q"; lastRes = null; hintsUsed = 0; timeLeft = timerSecs; $("answer").value = ""; saveGame(); renderSteps(); nextQuestion(run); };
+$("next").onclick = () => { if (qOpen || phase !== "a") return; idx++; phase = "q"; lastRes = null; hintsUsed = 0; timeLeft = timerSecs; $("answer").value = ""; saveGame(); renderSteps(); nextQuestion(run); };
 
-function finish() {
-  clearInterval(tick); active = false; clearSave(); show("end");
+function finish(early) {
+  clearInterval(tick); qOpen = false; curQ++; active = false; clearSave(); $("giveModal").hidden = true; show("end");
   countUp($("endScore"), 0, total, " β.", 1200);
   const right = stats[1] + stats[2] + stats[3];
-  $("endInfo").textContent = "Βρήκες " + right + " από " + pool.length + " παροιμίες.";
+  $("endInfo").textContent = (early ? "Τερμάτισες νωρίτερα. " : "") + "Βρήκες " + right + " από " + pool.length + " παροιμίες.";
+  let rtxt = "", isNew = false;
+  if (early) rtxt = "Το παιχνίδι δεν ολοκληρώθηκε, οπότε δεν καταγράφεται στα ρεκόρ σου.";
+  else {
+    const r = recordGame(), tl = timerSecs ? "με " + timerSecs + " δλ ανά ερώτηση" : "χωρίς χρόνο";
+    if (r.prevBest === null) { rtxt = "Πρώτο καταγεγραμμένο παιχνίδι " + tl + ". Αυτό είναι το ρεκόρ σου!"; isNew = true; }
+    else if (total > r.prevBest) { rtxt = "Νέο προσωπικό ρεκόρ " + tl + "! +" + (total - r.prevBest) + " βαθμοί από το προηγούμενο (" + r.prevBest + ")."; isNew = true; }
+    else if (total === r.prevBest) rtxt = "Ισοφάρισες το ρεκόρ σου (" + r.prevBest + " β.) " + tl + ".";
+    else rtxt = "Το ρεκόρ σου " + tl + " είναι " + r.prevBest + " β. Απέχεις " + (r.prevBest - total) + ".";
+  }
+  $("endRecord").textContent = rtxt; $("endRecord").className = "center" + (isNew ? " rec-new" : "");
+  if (isNew) setTimeout(() => confetti(innerWidth / 2, innerHeight * 0.3, 60), 800);
   $("endPath").innerHTML = "";
   LEVELS.forEach((L, i) => {
     const c = document.createElement("div"); c.className = "card"; c.style.setProperty("--i", i);
@@ -769,13 +1013,11 @@ function finish() {
 $("again").onclick = () => show("setup");
 $("toHome").onclick = () => show("home");
 /* προειδοποίηση εξόδου: εμφανίζεται μόνο αν έχεις ήδη απαντήσει (ή παραλείψει) τουλάχιστον 4 ερωτήσεις */
-let resumeTimer = false;
-function leaveGame() { run++; active = false; clearInterval(tick); clearSave(); $("quitModal").hidden = true; $("banner").classList.remove("show"); show("home"); }
-function stayGame() { $("quitModal").hidden = true; if (resumeTimer) { resumeTimer = false; startTimer(timeLeft); } }
+function leaveGame() { run++; qOpen = false; curQ++; active = false; clearInterval(tick); clearSave(); $("quitModal").hidden = true; $("giveModal").hidden = true; $("banner").classList.remove("show"); show("home"); }
+function stayGame() { $("quitModal").hidden = true; }   // το χρονόμετρο ΔΕΝ σταματά όσο είναι ανοιχτό το παράθυρο (αλλιώς θα ήταν δωρεάν παύση)
 $("quit").onclick = () => {
   const done = results.filter(r => r !== undefined).length;
   if (done < 4) return leaveGame();
-  resumeTimer = !locked && timerSecs > 0 && !$("play").hidden; clearInterval(tick);
   $("qText").textContent = "Έχεις ήδη απαντήσει " + done + " από " + pool.length + " ερωτήσεις και έχεις " + total + " βαθμούς. Αν βγεις, η πρόοδός σου θα χαθεί.";
   $("quitModal").hidden = false; $("qStay").focus();
 };
@@ -803,13 +1045,13 @@ setInterval(heroNext, 3800);
 /* ---- εξαγωγή: PDF (διανυσματικό) ή παρουσίαση (.pptx) ----
    Κάθε διαφάνεια χτίζεται ως SVG με σταθερά «πλαίσια» (frames): το κείμενο γίνεται καμπύλες (opentype.js)
    και τα emoji Twemoji μπαίνουν ως διανύσματα. Το PDF φτιάχνεται με svg2pdf (καθαρό σε κάθε μεγέθυνση).
-   Η παρουσίαση παίρνει ακριβώς τις ίδιες διαφάνειες ως PNG διπλής ανάλυσης (2560×1440). */
+   Η παρουσίαση παίρνει τις ίδιες διαφάνειες ως εγγενή σχήματα PowerPoint (διανύσματα). Μόνο αν αποτύχει, πέφτει σε PNG 2560×1440. */
 const SW = 1280, SH = 720, INK = "#16263a", MUTED = "#5a6b80", SBG = "#e9f0f8", SLINE = "#c8d6e6";
 const LIBS = {
   jspdf: "https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js",
   svg2pdf: "https://cdn.jsdelivr.net/npm/svg2pdf.js@2.2.4/dist/svg2pdf.umd.min.js",
   opentype: "https://cdn.jsdelivr.net/npm/opentype.js@1.3.4/dist/opentype.min.js",
-  pptx: "https://cdn.jsdelivr.net/gh/gitbrent/PptxGenJS@3.12.0/dist/pptxgen.bundle.js"
+  pptx: "https://cdn.jsdelivr.net/npm/pptxgenjs@4.0.1/dist/pptxgen.bundle.js"
 };
 const loadScript = src => new Promise((res, rej) => { const e = document.createElement("script"); e.src = src; e.onload = res; e.onerror = () => rej(new Error("script " + src)); document.head.appendChild(e); });
 
@@ -869,7 +1111,7 @@ function layoutTile(glyphs, end, size, maxW, L) {
     items.push(unit(parts));
   });
   const q = end ? "!" : "?";
-  items.push(unit([{ k: "s", c: "=", sz: sym, col: "#f0b429", w: tw(sy, "=", sym) }, { k: "s", c: q, sz: qs, col: end ? "#22c55e" : L.c, w: tw(sy, q, qs) }]));
+  items.push(unit([{ k: "s", c: "=", sz: sym, col: "#f0b429", w: tw(sy, "=", sym) }, { k: "s", c: q, sz: qs, col: L.c, w: tw(sy, q, qs) }]));
   const rows = [{ items: [], w: 0 }];
   items.forEach(u => {
     let r = rows[rows.length - 1];
@@ -927,7 +1169,7 @@ function slideSvg(s) {
     o += chrome(s) + sText("Ποια παροιμία κρύβεται;", SW / 2, 144, 44, 800, INK);
     o += sTile(s.x.p.e, { x: 80, y: 208, w: 1120, h: 360 }, 170, s.L, false);
   } else {
-    o += chrome(s) + sText("Απάντηση", SW / 2, 144, 40, 800, "#178a48");
+    o += chrome(s) + sText("Απάντηση", SW / 2, 144, 40, 800, s.L.t);
     o += sTile(s.x.p.e, { x: 80, y: 196, w: 1120, h: 160 }, 70, s.L, true);
     const fr = { x: 80, y: 384, w: 1120, h: 216 }, avail = fr.h - 56, tx = s.x.p.t, al = s.x.p.alt;
     let pick = null;
@@ -943,6 +1185,212 @@ function slideSvg(s) {
   }
   return `<svg xmlns="http://www.w3.org/2000/svg" width="${SW}" height="${SH}" viewBox="0 0 ${SW} ${SH}"><rect width="${SW}" height="${SH}" fill="${bg}"/>${o}</svg>`;
 }
+/* ---- SVG → εγγενή σχήματα PowerPoint (πραγματικά διανύσματα, όχι εικόνα) ----
+   Διαβάζει το SVG της διαφάνειας (rect, circle, ellipse, polygon, path, g με transform) και φτιάχνει ένα custGeom σχήμα
+   ανά στοιχείο με καμπύλες Bézier. Έτσι η διαφάνεια μένει καθαρή σε κάθε μέγεθος και σε PowerPoint, Keynote και Google Slides. */
+const SVGN = (() => {
+  const IN = 10 / 1280, K = 0.5522847498;                 // px → ίντσες (διαφάνεια 1280 px = 10 ίντσες) · σταθερά κύκλου με Bézier
+  const mul = (m, n) => [m[0]*n[0]+m[2]*n[1], m[1]*n[0]+m[3]*n[1], m[0]*n[2]+m[2]*n[3], m[1]*n[2]+m[3]*n[3], m[0]*n[4]+m[2]*n[5]+m[4], m[1]*n[4]+m[3]*n[5]+m[5]];
+  const ap = (m, x, y) => [m[0]*x + m[2]*y + m[4], m[1]*x + m[3]*y + m[5]];
+
+  function parseTransform(str) {
+    let m = [1, 0, 0, 1, 0, 0]; if (!str) return m;
+    for (const t of str.matchAll(/(\w+)\s*\(([^)]*)\)/g)) {
+      const a = t[2].trim().split(/[\s,]+/).filter(Boolean).map(Number); let n = null;
+      switch (t[1]) {
+        case "translate": n = [1, 0, 0, 1, a[0] || 0, a[1] || 0]; break;
+        case "scale": n = [a[0], 0, 0, a.length > 1 ? a[1] : a[0], 0, 0]; break;
+        case "rotate": { const r = (a[0] || 0) * Math.PI / 180, c = Math.cos(r), s = Math.sin(r); n = [c, s, -s, c, 0, 0];
+          if (a.length >= 3) n = mul(mul([1, 0, 0, 1, a[1], a[2]], n), [1, 0, 0, 1, -a[1], -a[2]]); break; }
+        case "matrix": n = a.slice(0, 6); break;
+        case "skewX": n = [1, 0, Math.tan((a[0] || 0) * Math.PI / 180), 1, 0, 0]; break;
+        case "skewY": n = [1, Math.tan((a[0] || 0) * Math.PI / 180), 0, 1, 0, 0]; break;
+      }
+      if (n && n.length === 6 && n.every(Number.isFinite)) m = mul(m, n);
+    }
+    return m;
+  }
+
+  // τόξο SVG → κυβικές καμπύλες Bézier
+  function arcToCubics(x1, y1, rx, ry, phiDeg, fa, fs, x2, y2) {
+    if (x1 === x2 && y1 === y2) return [];
+    rx = Math.abs(rx); ry = Math.abs(ry); if (!rx || !ry) return null;
+    const phi = phiDeg * Math.PI / 180, cs = Math.cos(phi), sn = Math.sin(phi), dx = (x1 - x2) / 2, dy = (y1 - y2) / 2;
+    const xp = cs * dx + sn * dy, yp = -sn * dx + cs * dy, lam = xp * xp / (rx * rx) + yp * yp / (ry * ry);
+    if (lam > 1) { const q = Math.sqrt(lam); rx *= q; ry *= q; }
+    const num = rx*rx*ry*ry - rx*rx*yp*yp - ry*ry*xp*xp, den = rx*rx*yp*yp + ry*ry*xp*xp;
+    const co = (fa === fs ? -1 : 1) * Math.sqrt(Math.max(0, num / den)), cxp = co * rx * yp / ry, cyp = -co * ry * xp / rx;
+    const cx = cs * cxp - sn * cyp + (x1 + x2) / 2, cy = sn * cxp + cs * cyp + (y1 + y2) / 2;
+    const ang = (ux, uy, vx, vy) => Math.atan2(ux * vy - uy * vx, ux * vx + uy * vy);
+    const th1 = ang(1, 0, (xp - cxp) / rx, (yp - cyp) / ry);
+    let dth = ang((xp - cxp) / rx, (yp - cyp) / ry, (-xp - cxp) / rx, (-yp - cyp) / ry);
+    if (!fs && dth > 0) dth -= 2 * Math.PI; else if (fs && dth < 0) dth += 2 * Math.PI;
+    const n = Math.max(1, Math.ceil(Math.abs(dth) / (Math.PI / 2) - 1e-9)), d = dth / n, t = 4 / 3 * Math.tan(d / 4), out = [];
+    const P = a => [cx + rx * Math.cos(a) * cs - ry * Math.sin(a) * sn, cy + rx * Math.cos(a) * sn + ry * Math.sin(a) * cs];
+    const D = a => [-rx * Math.sin(a) * cs - ry * Math.cos(a) * sn, -rx * Math.sin(a) * sn + ry * Math.cos(a) * cs];
+    for (let k = 0; k < n; k++) {
+      const a1 = th1 + k * d, a2 = a1 + d, p1 = P(a1), p2 = P(a2), d1 = D(a1), d2 = D(a2);
+      out.push([p1[0] + t * d1[0], p1[1] + t * d1[1], p2[0] - t * d2[0], p2[1] - t * d2[1], p2[0], p2[1]]);
+    }
+    return out;
+  }
+
+  // d="…" → [["M",x,y],["L",x,y],["C",x1,y1,x2,y2,x,y],["Q",x1,y1,x,y],["Z"]] (όλα απόλυτα)
+  function parsePath(d) {
+    const out = [], NUM = /[-+]?(?:\d+\.?\d*|\.\d+)(?:[eE][-+]?\d+)?/y, n = d.length;
+    let i = 0, cmd = "", x = 0, y = 0, sx = 0, sy = 0, lcx = 0, lcy = 0, prev = "";
+    const ws = () => { while (i < n && /[\s,]/.test(d[i])) i++; };
+    const num = () => { ws(); NUM.lastIndex = i; const m = NUM.exec(d); if (!m) throw new Error("path"); i = NUM.lastIndex; return parseFloat(m[0]); };
+    const flag = () => { ws(); const c = d[i++]; if (c !== "0" && c !== "1") throw new Error("flag"); return +c; };
+    ws();
+    while (i < n) {
+      if (/[A-Za-z]/.test(d[i])) cmd = d[i++]; else if (!cmd || cmd === "Z" || cmd === "z") throw new Error("path");
+      const rel = cmd === cmd.toLowerCase(), C = cmd.toUpperCase(), ox = rel ? x : 0, oy = rel ? y : 0;
+      if (C === "Z") { out.push(["Z"]); x = sx; y = sy; prev = "Z"; ws(); continue; }
+      if (C === "M") { x = ox + num(); y = oy + num(); sx = x; sy = y; out.push(["M", x, y]); cmd = rel ? "l" : "L"; prev = "M"; }
+      else if (C === "L") { x = ox + num(); y = oy + num(); out.push(["L", x, y]); prev = "L"; }
+      else if (C === "H") { x = ox + num(); out.push(["L", x, y]); prev = "L"; }
+      else if (C === "V") { y = oy + num(); out.push(["L", x, y]); prev = "L"; }
+      else if (C === "C") { const a = ox + num(), b = oy + num(), c = ox + num(), e = oy + num(), px = ox + num(), py = oy + num(); out.push(["C", a, b, c, e, px, py]); lcx = c; lcy = e; x = px; y = py; prev = "C"; }
+      else if (C === "S") { const a = prev === "C" ? 2 * x - lcx : x, b = prev === "C" ? 2 * y - lcy : y, c = ox + num(), e = oy + num(), px = ox + num(), py = oy + num(); out.push(["C", a, b, c, e, px, py]); lcx = c; lcy = e; x = px; y = py; prev = "C"; }
+      else if (C === "Q") { const a = ox + num(), b = oy + num(), px = ox + num(), py = oy + num(); out.push(["Q", a, b, px, py]); lcx = a; lcy = b; x = px; y = py; prev = "Q"; }
+      else if (C === "T") { const a = prev === "Q" ? 2 * x - lcx : x, b = prev === "Q" ? 2 * y - lcy : y, px = ox + num(), py = oy + num(); out.push(["Q", a, b, px, py]); lcx = a; lcy = b; x = px; y = py; prev = "Q"; }
+      else if (C === "A") {
+        const rx = num(), ry = num(), rot = num(), fa = flag(), fs = flag(), px = ox + num(), py = oy + num(), cu = arcToCubics(x, y, rx, ry, rot, fa, fs, px, py);
+        if (cu === null) out.push(["L", px, py]); else cu.forEach(c => out.push(["C", ...c]));
+        x = px; y = py; prev = "A";
+      } else throw new Error("cmd " + cmd);
+      ws();
+    }
+    return out;
+  }
+
+  const rectSegs = (x, y, w, h, rx, ry) => {
+    if (rx == null && ry == null) rx = ry = 0; else if (rx == null) rx = ry; else if (ry == null) ry = rx;
+    rx = Math.min(rx, w / 2); ry = Math.min(ry, h / 2);
+    if (!rx || !ry) return [["M", x, y], ["L", x + w, y], ["L", x + w, y + h], ["L", x, y + h], ["Z"]];
+    const kx = rx * K, ky = ry * K, r = x + w, b = y + h;
+    return [["M", x + rx, y], ["L", r - rx, y], ["C", r - rx + kx, y, r, y + ry - ky, r, y + ry], ["L", r, b - ry], ["C", r, b - ry + ky, r - rx + kx, b, r - rx, b],
+      ["L", x + rx, b], ["C", x + rx - kx, b, x, b - ry + ky, x, b - ry], ["L", x, y + ry], ["C", x, y + ry - ky, x + rx - kx, y, x + rx, y], ["Z"]];
+  };
+  const ellipseSegs = (cx, cy, rx, ry) => { const kx = rx * K, ky = ry * K;
+    return [["M", cx + rx, cy], ["C", cx + rx, cy + ky, cx + kx, cy + ry, cx, cy + ry], ["C", cx - kx, cy + ry, cx - rx, cy + ky, cx - rx, cy],
+      ["C", cx - rx, cy - ky, cx - kx, cy - ry, cx, cy - ry], ["C", cx + kx, cy - ry, cx + rx, cy - ky, cx + rx, cy], ["Z"]]; };
+
+  const NAMED = { white: "FFFFFF", black: "000000", red: "FF0000", green: "008000", blue: "0000FF", yellow: "FFFF00", gray: "808080", grey: "808080", orange: "FFA500" };
+  function color(v) {   // → "RRGGBB" | null (χωρίς χρώμα) | undefined (άγνωστο)
+    if (v == null) return undefined; v = String(v).trim().toLowerCase();
+    if (!v || v === "none" || v === "transparent") return null;
+    let m = /^#([0-9a-f]{3})$/.exec(v); if (m) return m[1].split("").map(c => c + c).join("").toUpperCase();
+    m = /^#([0-9a-f]{6})/.exec(v); if (m) return m[1].toUpperCase();
+    m = /^rgb\(\s*([\d.]+)[\s,]+([\d.]+)[\s,]+([\d.]+)/.exec(v); if (m) return [m[1], m[2], m[3]].map(c => Math.max(0, Math.min(255, Math.round(+c))).toString(16).padStart(2, "0")).join("").toUpperCase();
+    if (NAMED[v]) return NAMED[v];
+    return undefined;
+  }
+
+  const TAG = /<(\/?)([A-Za-z][\w:.-]*)((?:\s+[^\s=>\/]+\s*=\s*(?:"[^"]*"|'[^']*'))*)\s*(\/?)>/g, ATTR = /([^\s=]+)\s*=\s*(?:"([^"]*)"|'([^']*)')/g;
+  const SKIP = new Set(["defs", "clippath", "mask", "lineargradient", "radialgradient", "pattern", "symbol", "marker", "style", "title", "desc", "metadata", "filter"]);
+  const PROPS = ["fill", "stroke", "stroke-width", "stroke-linejoin", "fill-rule"];
+
+  // SVG κείμενο → λίστα σχημάτων { segs: [...σε px της διαφάνειας], fill: "RRGGBB"|null, ftr: διαφάνεια 0-100, stroke, sw (pt), str }
+  function parse(svg) {
+    const shapes = [], stack = [{ m: [1, 0, 0, 1, 0, 0], st: { fill: "#000000", stroke: "none", "stroke-width": "1" }, op: 1, fop: 1, sop: 1, skip: false }];
+    let bad = 0;
+    for (const t of svg.matchAll(TAG)) {
+      const closing = t[1] === "/", tag = t[2].toLowerCase(), selfClose = t[4] === "/";
+      if (closing) { if (stack.length > 1) stack.pop(); continue; }
+      const at = {}; for (const a of t[3].matchAll(ATTR)) at[a[1]] = a[2] !== undefined ? a[2] : a[3];
+      const par = stack[stack.length - 1], st = { ...par.st };
+      if (at.style) at.style.split(";").forEach(p => { const k = p.indexOf(":"); if (k > 0) { const key = p.slice(0, k).trim(); if (!(key in at)) at[key] = p.slice(k + 1).trim(); } });
+      PROPS.forEach(k => { if (at[k] != null) st[k] = at[k]; });
+      const me = { m: at.transform ? mul(par.m, parseTransform(at.transform)) : par.m, st, op: par.op * (at.opacity != null ? +at.opacity : 1),
+        fop: par.fop * (at["fill-opacity"] != null ? +at["fill-opacity"] : 1), sop: par.sop * (at["stroke-opacity"] != null ? +at["stroke-opacity"] : 1), skip: par.skip || SKIP.has(tag) };
+      if (!selfClose) stack.push(me);
+      if (me.skip) continue;
+      let segs = null; const f = k => parseFloat(at[k]);
+      try {
+        if (tag === "path" && at.d) segs = parsePath(at.d);
+        else if (tag === "rect") segs = rectSegs(f("x") || 0, f("y") || 0, f("width"), f("height"), at.rx != null ? f("rx") : null, at.ry != null ? f("ry") : null);
+        else if (tag === "circle") segs = ellipseSegs(f("cx") || 0, f("cy") || 0, f("r"), f("r"));
+        else if (tag === "ellipse") segs = ellipseSegs(f("cx") || 0, f("cy") || 0, f("rx"), f("ry"));
+        else if (tag === "polygon" || tag === "polyline") {
+          const v = (at.points || "").trim().split(/[\s,]+/).map(Number); segs = [];
+          for (let k = 0; k + 1 < v.length; k += 2) segs.push([k ? "L" : "M", v[k], v[k + 1]]);
+          if (tag === "polygon") segs.push(["Z"]);
+        }
+      } catch (e) { bad++; continue; }
+      if (!segs || !segs.length) continue;
+      if (segs.some(s => s.slice(1).some(v => !Number.isFinite(v)))) { bad++; continue; }
+      let fill = color(me.st.fill), stroke = color(me.st.stroke);
+      if (fill === undefined) { bad++; fill = null; }                       // π.χ. url(#gradient): δεν υποστηρίζεται
+      if (stroke === undefined) { bad++; stroke = null; }
+      if (fill === null && stroke === null) continue;
+      const m = me.m, sc = Math.sqrt(Math.abs(m[0] * m[3] - m[1] * m[2]));
+      const tsegs = segs.map(s => { const o = [s[0]]; for (let k = 1; k + 1 < s.length; k += 2) o.push(...ap(m, s[k], s[k + 1])); return o; });
+      const groups = fill && me.st["fill-rule"] !== "evenodd" ? splitNonzero(tsegs) : [tsegs];
+      groups.forEach(g => shapes.push({
+        segs: g, fill, ftr: Math.round((1 - Math.max(0, Math.min(1, me.op * me.fop))) * 100),
+        stroke, sw: (parseFloat(me.st["stroke-width"]) || 1) * sc * IN * 72, str: Math.round((1 - Math.max(0, Math.min(1, me.op * me.sop))) * 100)
+      }));
+    }
+    shapes.bad = bad; return shapes;
+  }
+
+
+  // Το PowerPoint γεμίζει με even-odd, το SVG με nonzero. Για να μη «ανοίγουν τρύπες» σε επικαλυπτόμενα περιγράμματα (γράμματα, emoji),
+  // κάθε εξωτερικό περίγραμμα γίνεται δικό του σχήμα μαζί με τις δικές του τρύπες (αντίθετη φορά, μέσα του).
+  function splitNonzero(segs) {
+    const subs = []; segs.forEach(s => { if (s[0] === "M" || !subs.length) subs.push([]); subs[subs.length - 1].push(s); });
+    if (subs.length < 2) return [segs];
+    const info = subs.map(sub => {
+      const poly = []; let cx = 0, cy = 0;
+      sub.forEach(s => {
+        if (s[0] === "M" || s[0] === "L") { cx = s[1]; cy = s[2]; poly.push([cx, cy]); }
+        else if (s[0] === "C") { for (let k = 1; k <= 6; k++) { const t = k / 6, u = 1 - t; poly.push([u*u*u*cx + 3*u*u*t*s[1] + 3*u*t*t*s[3] + t*t*t*s[5], u*u*u*cy + 3*u*u*t*s[2] + 3*u*t*t*s[4] + t*t*t*s[6]]); } cx = s[5]; cy = s[6]; }
+        else if (s[0] === "Q") { for (let k = 1; k <= 4; k++) { const t = k / 4, u = 1 - t; poly.push([u*u*cx + 2*u*t*s[1] + t*t*s[3], u*u*cy + 2*u*t*s[2] + t*t*s[4]]); } cx = s[3]; cy = s[4]; }
+      });
+      let a = 0; for (let k = 0; k < poly.length; k++) { const p = poly[k], q = poly[(k + 1) % poly.length]; a += p[0] * q[1] - q[0] * p[1]; }
+      return { sub, poly, area: a / 2 };
+    });
+    const inside = (pt, poly) => { let c = false; for (let i = 0, j = poly.length - 1; i < poly.length; j = i++) { const a = poly[i], b = poly[j];
+      if ((a[1] > pt[1]) !== (b[1] > pt[1]) && pt[0] < (b[0] - a[0]) * (pt[1] - a[1]) / (b[1] - a[1]) + a[0]) c = !c; } return c; };
+    const order = info.map((_, i) => i).sort((a, b) => Math.abs(info[b].area) - Math.abs(info[a].area));   // μεγάλα πρώτα
+    const groups = [];                                                                                         // { outer, holes[] }
+    order.forEach(i => {
+      const c = info[i], pt = c.poly[0]; let host = null;
+      order.forEach(j => { const o = info[j]; if (j === i || !o.group || Math.abs(o.area) <= Math.abs(c.area)) return;
+        if (inside(pt, o.poly) && (!host || Math.abs(o.area) < Math.abs(info[host].area))) host = j; });   // πιο κοντινό εξωτερικό που το περιέχει
+      if (host !== null && Math.sign(info[host].area) !== Math.sign(c.area)) info[host].group.holes.push(c.sub);
+      else { c.group = { outer: c.sub, holes: [] }; groups.push(c.group); }
+    });
+    return groups.map(g => [].concat(g.outer, ...g.holes));
+  }
+
+  const r5 = v => Math.round(v * 1e5) / 1e5;
+  // προσθέτει τα σχήματα στη διαφάνεια του PptxGenJS (sl) · επιστρέφει πόσα σχήματα έγιναν
+  function addToSlide(svg, sl, pptx) {
+    const shapes = parse(svg); let count = 0;
+    shapes.forEach((sh, idx) => {
+      let x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity;
+      sh.segs.forEach(s => { for (let k = 1; k + 1 < s.length; k += 2) { x0 = Math.min(x0, s[k]); x1 = Math.max(x1, s[k]); y0 = Math.min(y0, s[k + 1]); y1 = Math.max(y1, s[k + 1]); } });
+      if (idx === 0 && sh.fill && !sh.stroke && x0 <= 0.5 && y0 <= 0.5 && x1 >= 1279.5 && y1 >= 719.5) { sl.background = { color: sh.fill }; return; }   // το φόντο γίνεται φόντο διαφάνειας
+      const w = Math.max((x1 - x0) * IN, 1e-4), h = Math.max((y1 - y0) * IN, 1e-4), X = v => r5((v - x0) * IN), Y = v => r5((v - y0) * IN), pts = [];
+      sh.segs.forEach(s => {
+        if (s[0] === "M") pts.push({ x: X(s[1]), y: Y(s[2]), moveTo: true });
+        else if (s[0] === "L") pts.push({ x: X(s[1]), y: Y(s[2]) });
+        else if (s[0] === "C") pts.push({ x: X(s[5]), y: Y(s[6]), curve: { type: "cubic", x1: X(s[1]), y1: Y(s[2]), x2: X(s[3]), y2: Y(s[4]) } });
+        else if (s[0] === "Q") pts.push({ x: X(s[3]), y: Y(s[4]), curve: { type: "quadratic", x1: X(s[1]), y1: Y(s[2]) } });
+        else pts.push({ close: true });
+      });
+      const o = { x: r5(x0 * IN), y: r5(y0 * IN), w: r5(w), h: r5(h), points: pts };
+      if (sh.fill) o.fill = sh.ftr ? { color: sh.fill, transparency: sh.ftr } : { color: sh.fill };
+      if (sh.stroke) o.line = { color: sh.stroke, width: Math.max(0.25, +sh.sw.toFixed(2)), ...(sh.str ? { transparency: sh.str } : {}) };
+      sl.addShape(pptx.ShapeType.custGeom, o); count++;
+    });
+    return count;
+  }
+  return { parse, parsePath, addToSlide };
+})();
 const svgToPng = (svg, scale) => new Promise((res, rej) => {
   const url = URL.createObjectURL(new Blob([svg], { type: "image/svg+xml" })), img = new Image();
   img.onload = () => { const c = document.createElement("canvas"); c.width = SW * scale; c.height = SH * scale; c.getContext("2d").drawImage(img, 0, 0, c.width, c.height); URL.revokeObjectURL(url); res(c.toDataURL("image/png")); };
@@ -983,15 +1431,20 @@ async function exportGame(format, answersAtEnd, onProg) {
     } finally { holder.remove(); }
     onProg("Αποθήκευση αρχείου…", 97); doc.save(name);
   } else {
-    const pptx = new window.PptxGenJS(); pptx.layout = "LAYOUT_16x9"; pptx.title = "Emoji Παροιμίες";
-    for (let i = 0; i < total; i++) {
-      const sl = pptx.addSlide(), s = slides[i];
-      sl.addImage({ data: await svgToPng(slideSvg(s), 2), x: 0, y: 0, w: 10, h: 5.625 });
-      if (s.kind === "q") sl.addNotes("Απάντηση: " + s.x.p.t + " (" + s.x.p.alt + ")");
-      onProg("Διαφάνεια " + (i + 1) + " από " + total + "…", 15 + 80 * (i + 1) / total); await wait(0);
-    }
-    onProg("Αποθήκευση αρχείου…", 97);
-    const out = await pptx.write({ outputType: "blob" });
+    // Κάθε διαφάνεια γίνεται εγγενή σχήματα PowerPoint (διανύσματα, καθαρά σε κάθε μέγεθος). Αν κάτι αποτύχει, δοκιμάζει ξανά με PNG διπλής ανάλυσης.
+    const build = async vector => {
+      const pptx = new window.PptxGenJS(); pptx.layout = "LAYOUT_16x9"; pptx.title = "Emoji Παροιμίες";
+      for (let i = 0; i < total; i++) {
+        const sl = pptx.addSlide(), s = slides[i], svg = slideSvg(s);
+        if (vector) { if (!SVGN.addToSlide(svg, sl, pptx)) throw new Error("κενή διαφάνεια"); }
+        else sl.addImage({ data: await svgToPng(svg, 2), x: 0, y: 0, w: 10, h: 5.625 });
+        if (s.kind === "q") sl.addNotes("Απάντηση: " + s.x.p.t + " (" + s.x.p.alt + ")");
+        onProg("Διαφάνεια " + (i + 1) + " από " + total + "…", 15 + 80 * (i + 1) / total); await wait(0);
+      }
+      onProg("Αποθήκευση αρχείου…", 97);
+      return pptx.write({ outputType: "blob" });
+    };
+    let out; try { out = await build(true); } catch (e) { console.warn("Η διανυσματική παρουσίαση απέτυχε, γίνεται PNG:", e); out = await build(false); }
     saveBlob(out instanceof Blob ? out : new Blob([out], { type: "application/vnd.openxmlformats-officedocument.presentationml.presentation" }), name);
   }
   onProg("Έτοιμο! Το αρχείο αποθηκεύτηκε.", 100);
@@ -1017,6 +1470,9 @@ async function runExport(fmt) {
 $("exPdf").onclick = () => runExport("pdf"); $("exPptx").onclick = () => runExport("pptx");
 
 /* ---- βαθμονόμηση ---- */
+/* ===== ΜΟΝΟ ΓΙΑ ΑΝΑΠΤΥΞΗ: εργαλείο βαθμονόμησης. Τρέχει μόνο όταν DEV_MODE = true. =====
+   Αλλάζει το ζωντανό CONFIG (threshold/margin) ΜΟΝΟ στη μνήμη. Δεν αποθηκεύεται πουθενά και δεν διαβάζεται από localStorage. */
+function setupCalibration() {
 const TESTS = [
   ["Ένα χελιδόνι δεν φέρνει την άνοιξη", "Μια χελιδόνα δεν φέρνει την άνοιξη", true, "παραφράση"],
   ["Ένα χελιδόνι δεν φέρνει την άνοιξη", "Ένα μόνο σημάδι δεν αρκεί για συμπέρασμα", true, "άλλη διατύπωση"],
@@ -1041,7 +1497,7 @@ function paintTests() {
   testRows.forEach(r => {
     const got = Similarity.decide(r);
     const tr = document.createElement("tr");
-    [r.ref, r.user, r.kind, r.score.toFixed(2) + (r.guards ? "" : " ⛔"), r.rival.toFixed(2), r.exp ? "ναι" : "όχι", got === r.exp ? "✔" : "✘"].forEach((v, i) => {
+    [r.ref, r.user, r.kind, r.score.toFixed(2) + (r.guards ? "" : " ⛔") + (r.complete === false ? " ✂" : ""), r.rival.toFixed(2), r.exp ? "ναι" : "όχι", got === r.exp ? "✔" : "✘"].forEach((v, i) => {
       const td = document.createElement("td"); td.textContent = v;
       if (i === 6) td.className = got === r.exp ? "ok" : "no";
       tr.appendChild(td);
@@ -1049,7 +1505,7 @@ function paintTests() {
     t.appendChild(tr);
   });
 }
-const bindNum = (id, key) => $(id).oninput = e => { const v = parseFloat(e.target.value); if (!isNaN(v)) { CONFIG[key] = v; if (testRows.length) paintTests(); } };
+const bindNum = (id, key) => $(id).oninput = e => { const v = parseFloat(e.target.value); if (!isNaN(v) && v >= 0 && v <= 1) { CONFIG[key] = v; if (testRows.length) paintTests(); } };
 bindNum("thr", "threshold"); bindNum("mar", "margin");
 $("runTests").onclick = async () => {
   $("runTests").disabled = true; $("runTests").textContent = "Εκτέλεση…";
@@ -1064,6 +1520,9 @@ $("runTests").onclick = async () => {
   $("runTests").disabled = false; $("runTests").textContent = "Εκτέλεση δοκιμών";
 };
 
+
+}
+if (DEV_MODE) setupCalibration();
 
 /* ---- εκκίνηση: κατέβασμα του μοντέλου στο παρασκήνιο ---- */
 setStatus("idle");
